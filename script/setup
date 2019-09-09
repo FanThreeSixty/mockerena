@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+#
+# SETUP
+# is used to set up a project in an initial state, including development environment.
+# This is typically run only after an initial clone, or to reset the project back to its initial state.
+
+usage()
+{
+    echo "usage: setup [[-r reinstall ] | [-h]]"
+}
+
+# optional argument(s)
+while [[ "$1" != "" ]]; do
+    case $1 in
+        -r | --reinstall )      shift
+                                reinstall=1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
+ROOT="$( dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd ))"
+
+echo "Starting development environment setup for Mockerena"
+
+#
+# Check for pip, install if not installed
+#
+if test ! "$( command -v pip )"; then
+    echo "Installing pip..."
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    python get-pip.py
+    rm get-pip.py
+fi
+
+# Reinstall project if specified
+if [[ "$reinstall" == "1" ]]; then
+    if [[ -d "$ROOT/venv" ]]; then
+        echo "Removing existing virtual environment..."
+        rm -rf venv/
+    fi
+fi
+
+# Ensure scripts are running from the correct environment
+${ROOT}/script/bootstrap
+
+# Install dependencies
+${ROOT}/script/update

@@ -1,0 +1,48 @@
+{
+  "name": "mockerena",
+  "description": "Mock data providers for data integrations",
+  "version": "1.0.0",
+  "scripts": {
+    "docs": "script/docs",
+    "postsetup": "node postsetup.js",
+    "setup": "npm install && script/setup",
+    "server": "script/server",
+    "start": "sls wsgi serve -p 9000",
+    "test": "script/test",
+    "update": "npm install && script/update"
+  },
+  "repository": "github:FanThreeSixty/mockerena",
+  "keywords": [
+    "flask",
+    "integrations",
+    "data",
+    "mock",
+    "api"
+  ],
+  "author": "John Lane",
+  "contributors": [
+    "John Lane <john.lane93@gmail.com>",
+    "Michael Holtzscher <mholtzscher@fanthreesixty.com>",
+    "Robert Langenfeld <rlangenfeld@fanthreesixty.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/FanThreeSixty/mockerena/issues"
+  },
+  "homepage": "https://github.com/FanThreeSixty/mockerena",
+  "devDependencies": {
+    "chalk": "^2.4.2",
+    "inquirer": "^7.0.0",
+    "js-yaml": "^3.13.1",
+    "serverless-python-requirements": "^5.0.0",
+    "serverless-wsgi": "^1.7.3"
+  },
+  "dependencies": {
+    "serverless": "^1.51.0"
+  },
+  "engines": {
+    "node": ">= 8.0.0",
+    "npm": ">= 6.0.0"
+  }
+}

@@ -1,0 +1,25 @@
+Generates sample data from a schema
+---
+parameters:
+  - $ref: "#/parameters/schema_id"
+  - $ref: "#/parameters/seed"
+  - $ref: "#/parameters/numrows"
+  - $ref: "#/parameters/file_format"
+  - $ref: "#/parameters/include_header"
+  - $ref: "#/parameters/exclude_null"
+responses:
+  200:
+    description: OK
+    content:
+        application/binary:
+          schema:
+            type: string
+            format: binary
+  301:
+    $ref: "#/responses/movedPermanently"
+  404:
+    $ref: "#/responses/notFound"
+  500:
+    $ref: "#/responses/internalServerError"
+tags:
+  - generate

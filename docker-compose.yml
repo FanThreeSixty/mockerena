@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  mockerena:
+    build: .
+    depends_on:
+      - mongo
+    ports:
+      - 5000:5000
+    environment:
+      - MOCKERENA_MONGO_HOST=mongo
+    volumes:
+      - ./mockerena:/deploy/app/mockerena
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017

@@ -1,0 +1,50 @@
+service: mockerena
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: mockerena.app.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: true
+    zip: true
+    noDeploy:
+      - bumpversion
+      - pytest
+      - pytest-cov
+      - pytest-flask
+      - pytest-pep8
+      - pytest-pylint
+      - Sphinx
+      - sphinx-rtd-theme
+package:
+  exclude:
+    - docs/**
+    - node_modules/**
+    - script/**
+    - tests/**
+    - venv/**
+provider:
+  name: aws
+  runtime: python3.6
+  timeout: 30
+  stage: prod
+  region: us-east-1
+  environment:
+    MOCKERENA_ENV: production
+    MOCKERENA_BASE_PATH: /${self:provider.stage}
+    MOCKERENA_HOST:
+      Fn::Join:
+        - ""
+        - - Ref: "ApiGatewayRestApi"
+          - ".execute-api.${self:provider.region}.amazonaws.com"
+    MOCKERENA_MONGO_HOST: ${ssm:MOCKERENA_HOST}
+    MOCKERENA_MONGO_USERNAME: ${ssm:MOCKERENA_MONGO_USERNAME}
+    MOCKERENA_MONGO_PASSWORD: ${ssm:MOCKERENA_MONGO_PASSWORD}
+functions:
+  app:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}

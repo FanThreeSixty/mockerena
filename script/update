@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+#
+# UPDATE
+# is used to update the project after a fresh pull.
+# If you have not worked on the project for a while, running script/update after a pull will ensure that everything
+# inside the project is up to date and ready to work.
+#
+
+ROOT="$( dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd ))"
+
+# Ensure scripts are running from the correct environment
+${ROOT}/script/bootstrap
+
+pip install -U -r ${ROOT}/requirements.txt
+pip install -e .

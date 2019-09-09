@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+#
+# BOOTSTRAP
+# is used to ensure scripts are running from the correct environment
+
+ROOT="$( dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd ))"
+
+#
+# Check for virtualenv, install if not installed
+#
+if test ! "$( command -v virtualenv )"; then
+    echo "Installing virtualenv..."
+    pip install virtualenv
+fi
+
+#
+# Create a virtual environment is one does not exist
+#
+if [[ ! -d "$ROOT/venv" ]]; then
+  virtualenv -p python3 ${ROOT}/venv/
+fi
+
+#
+# Activate virtual environment
+#
+if [[ -d "$ROOT/venv" ]]; then
+  source ${ROOT}/venv/bin/activate
+fi
+
+echo "Python interpreter: $(which python)"

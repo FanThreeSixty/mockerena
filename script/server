@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+#
+# SERVER
+# is used to start the application.
+
+usage()
+{
+    echo "usage: server [[-g gunicorn ] | [-h]]"
+}
+
+# optional argument(s)
+while [[ "$1" != "" ]]; do
+    case $1 in
+        -g | --gunicorn )       shift
+                                gunicorn=1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
+ROOT="$( dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd ))"
+
+# Ensure scripts are running from the correct environment
+${ROOT}/script/bootstrap
+
+# Run project
+if [[ "$gunicorn" == "1" ]]; then
+
+    # Install gunicorn if not available
+    if [[ "$(which gunicorn)" != "$ROOT/venv/bin/gunicorn" ]]; then
+        echo "Installing gunicorn..."
+        pip install 'gunicorn>=19.9.0'
+    fi
+
+    gunicorn --config "$ROOT/gunicorn_config.py" mockerena.app:app
+
+else
+    python ${ROOT}/mockerena/app.py
+fi

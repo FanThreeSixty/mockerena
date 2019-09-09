@@ -1,0 +1,16 @@
+Returns all available provider types
+---
+responses:
+  200:
+    description: OK
+    content:
+        application/binary:
+          schema:
+            type: string
+            format: binary
+  301:
+    $ref: "#/responses/movedPermanently"
+  500:
+    $ref: "#/responses/internalServerError"
+tags:
+  - default

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+#
+# DOCS
+# is used to generate documentation for the project.
+#
+
+usage()
+{
+    echo "usage: docs [[-b build ] | [-h]]"
+}
+
+# optional argument(s)
+while [[ "$1" != "" ]]; do
+    case $1 in
+        -b | --build )          shift
+                                build=1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
+ROOT="$( dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd ))"
+PLATFORM=$(python -c "import platform; print(platform.system())")
+
+# Ensure scripts are running from the correct environment
+${ROOT}/script/bootstrap
+
+#
+# Check for sphinx-build, install if not installed
+#
+if [[ "$(which sphinx-build)" != "$ROOT/venv/bin/sphinx-build" ]]; then
+    echo "Installing sphinx-build..."
+    pip install 'Sphinx>=1.8.0' 'sphinx-rtd-theme>=0.4.2'
+fi
+
+# sphinx-apidoc -f -o $ROOT/docs/source $ROOT/mockerena/
+sphinx-build -b html ${ROOT}/docs ${ROOT}/docs/_build
+
+# Open docs in browser
+if [[ ${PLATFORM} == "Darwin" ]]
+then
+  open "${ROOT}/docs/_build/index.html"
+elif [[ ${PLATFORM} == "Linux" ]]
+then
+  sensible-browser "${ROOT}/docs/_build/index.html"
+fi

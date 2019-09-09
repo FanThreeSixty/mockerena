@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#
+# TEST
+# is used to run project tests
+
+ROOT="$( dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd ))"
+
+# Ensure scripts are running from the correct environment
+${ROOT}/script/bootstrap
+
+#
+# Check for pytest, install if not installed
+#
+if [[ "$(which pytest)" != "$ROOT/venv/bin/pytest" ]]; then
+    echo "Installing pytest..."
+    pip install 'pytest>=3.8.0' 'pytest-cov>=2.6.0' 'pytest-flask>=0.13.0' 'pytest-pep8>=1.0.0'
+fi
+
+cd ${ROOT}
+pytest tests/

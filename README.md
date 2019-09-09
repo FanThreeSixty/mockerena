@@ -1,6 +1,7 @@
 # Mockerena
 
-Big show allows anyone to mock data files through customized json schemas and provides routes for external systems to retrieve from it.
+Mockerena allows anyone to mock data files through customized json
+schemas and provides routes for external systems to retrieve from it.
 
 ## Table of Contents
 
