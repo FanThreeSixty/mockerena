@@ -48,33 +48,20 @@ def test_function_this(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_conditionals(client):
+def test_function_conditionals(client, sample_schema):
     """Test to ensure built-in 'None' works in function
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 10,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "word",
-                "percent_empty": 0.5
-            },
-            {
-                "name": "bar",
-                "type": "word",
-                "function": "'FULL' if field[\"foo\"] != None else \"EMPTY\""
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 10
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["percent_empty"] = 0.5
+    sample_schema["columns"][1]["function"] = "'FULL' if field[\"foo\"] != None else \"EMPTY\""
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert len(res.json) == 10
@@ -100,63 +87,41 @@ def test_function_restrict(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_abs(client):
+def test_function_abs(client, sample_schema):
     """Test to ensure abs function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_int",
-                "args": {
-                    "min": -10,
-                    "max": -1
-                },
-                "function": "abs(this)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["type"] = "random_int"
+    sample_schema["columns"][0]["args"] = {"min": -10, "max": -1}
+    sample_schema["columns"][0]["function"] = "abs(this)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] > 0
 
 
 @pytest.mark.function
-def test_function_bool(client):
+def test_function_bool(client, sample_schema):
     """Test to ensure bool function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": [0],
-                },
-                "function": "bool(this)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": [0]}
+    sample_schema["columns"][0]["function"] = "bool(this)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] is False
@@ -205,180 +170,120 @@ def test_function_concat(client):
 
 
 @pytest.mark.function
-def test_function_day(client):
+def test_function_day(client, sample_schema):
     """Test to ensure day function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "function": "day(now())"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["function"] = "day(now())"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == datetime.now().day
 
 
 @pytest.mark.function
-def test_function_float(client):
+def test_function_float(client, sample_schema):
     """Test to ensure float function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_int",
-                "function": "float(this)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["type"] = "random_int"
+    sample_schema["columns"][0]["args"] = {}
+    sample_schema["columns"][0]["function"] = "float(this)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert isinstance(res.json[0]['foo'], float)
 
 
 @pytest.mark.function
-def test_function_hash(client):
+def test_function_hash(client, sample_schema):
     """Test to ensure hash function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": ["foo"],
-                },
-                "function": "hash(this)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["function"] = "hash(this)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert isinstance(res.json[0]['foo'], int)
 
 
 @pytest.mark.function
-def test_function_int(client):
+def test_function_int(client, sample_schema):
     """Test to ensure int function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": ["1"],
-                },
-                "function": "int(this)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["1"]}
+    sample_schema["columns"][0]["function"] = "int(this)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert isinstance(res.json[0]['foo'], int)
 
 
 @pytest.mark.function
-def test_function_isinstance(client):
+def test_function_isinstance(client, sample_schema):
     """Test to ensure isinstance function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": [1.999999],
-                },
-                "function": "isinstance(this, float)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": [1.999999]}
+    sample_schema["columns"][0]["function"] = "isinstance(this, float)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] is True
 
 
 @pytest.mark.function
-def test_function_join(client):
+def test_function_join(client, sample_schema):
     """Test to ensure join function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_choices",
-                "args": {
-                    "length": 2
-                },
-                "function": "join(this, ',')"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["type"] = "random_choices"
+    sample_schema["columns"][0]["args"] = {"length": 2}
+    sample_schema["columns"][0]["function"] = "join(this, ',')"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert len(res.json[0]['foo'].split(',')) == 2
@@ -403,31 +308,20 @@ def test_function_len(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_lower(client):
+def test_function_lower(client, sample_schema):
     """Test to ensure lower function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": ["FOO"],
-                },
-                "function": "lower(this)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["FOO"]}
+    sample_schema["columns"][0]["function"] = "lower(this)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == "foo"
@@ -494,62 +388,40 @@ def test_function_pow(client):
 
 
 @pytest.mark.function
-def test_function_round(client):
+def test_function_round(client, sample_schema):
     """Test to ensure round function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": [1.999999],
-                },
-                "function": "round(this, 2)"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": [1.999999]}
+    sample_schema["columns"][0]["function"] = "round(this, 2)"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == 2.0
 
 
 @pytest.mark.function
-def test_function_split(client):
+def test_function_split(client, sample_schema):
     """Test to ensure split function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": ["hello,world"]
-                },
-                "function": "split(this, ',')"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["hello,world"]}
+    sample_schema["columns"][0]["function"] = "split(this, ',')"
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == ["hello", "world"]
