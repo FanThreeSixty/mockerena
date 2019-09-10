@@ -3,7 +3,6 @@ sudo: required
 services:
   mongodb
 python:
-  - "2.7"
   - "3.6"
 # command to install dependencies
 install:
