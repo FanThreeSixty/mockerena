@@ -45,8 +45,7 @@ setup(
         "flasgger>=0.9.0",
         "Flask>=1.0.0",
         "Jinja2>=2.10",
-        "pandas>=0.24.0",
-        "ujson>=1.35"
+        "pandas>=0.24.0"
     ],
     python_requires=">=3.6",
     setup_requires=["pytest-runner"],

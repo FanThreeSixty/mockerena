@@ -8,6 +8,7 @@
 """
 
 import inspect
+import json
 import logging
 import os
 
@@ -16,7 +17,6 @@ from eve import Eve
 from faker.providers import BaseProvider
 from flasgger import Swagger, swag_from
 from flask import request, render_template
-import ujson
 
 from mockerena.errors import ERROR_404, ERROR_422
 from mockerena.format import format_output
@@ -59,7 +59,7 @@ def generate_and_format(schema):
             "_error": ERROR_422
         }
 
-        return ujson.dumps(error), 422, {'Content-Type': 'application/json'}
+        return json.dumps(error), 422, {'Content-Type': 'application/json'}
 
     mock_data = generate_data(schema)
     return format_output(mock_data, schema)
@@ -102,7 +102,7 @@ def generate(schema_id: str):
     schema = app.data.driver.db['schema'].find_one({"$or": search})
 
     if not schema:
-        return ujson.dumps({"_status": "ERR", "_error": ERROR_404}), 404, {'Content-Type': 'application/json'}
+        return json.dumps({"_status": "ERR", "_error": ERROR_404}), 404, {'Content-Type': 'application/json'}
 
     return generate_and_format(schema)
 
@@ -124,7 +124,7 @@ def get_types() -> tuple:
     :return:
     """
 
-    return ujson.dumps(get_provider_types()), 200, {'Content-Type': 'application/json'}
+    return json.dumps(get_provider_types()), 200, {'Content-Type': 'application/json'}
 
 
 if __name__ != '__main__':  # pragma: no cover
