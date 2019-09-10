@@ -19,6 +19,22 @@ Mockerena
    :target: https://codeclimate.com/github/jlane9/mockerena/test_coverage
    :alt: Test Coverage
 
+.. image:: https://badge.fury.io/py/mockerena.svg
+   :target: https://badge.fury.io/py/mockerena
+   :alt: PyPi Version
+
+.. image:: https://img.shields.io/pypi/pyversions/mockerena.svg
+   :target: https://pypi.python.org/pypi/mockerena
+   :alt: Python Version
+
+.. image:: https://img.shields.io/pypi/l/mockerena.svg
+   :target: https://pypi.python.org/pypi/mockerena
+   :alt: License
+
+.. image:: https://img.shields.io/pypi/status/mockerena.svg
+   :target: https://pypi.python.org/pypi/mockerena
+   :alt:
+
 .. image:: https://readthedocs.org/projects/mockerena/badge/?version=latest
    :target: https://mockerena.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
