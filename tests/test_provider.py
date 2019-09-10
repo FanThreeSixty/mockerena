@@ -59,6 +59,7 @@ def test_provider_weighted_choice(client, sample_schema):
     """
 
     sample_schema["file_format"] = "json"
+    sample_schema["num_rows"] = 100
     sample_schema["columns"][0]["type"] = "weighted_choice"
     sample_schema["columns"][0]["args"] = {"elements": ["foo", "bar"], "weights": [2, 1]}
 
