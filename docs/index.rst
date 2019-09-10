@@ -7,6 +7,26 @@
 Mockerena
 =========
 
+.. image:: https://travis-ci.org/jlane9/mockerena.svg?branch=master
+   :target: https://travis-ci.org/jlane9/mockerena
+   :alt: Build Status
+
+.. image:: https://api.codeclimate.com/v1/badges/e2ba8628f5a30a4a1fc8/maintainability
+   :target: https://codeclimate.com/github/jlane9/mockerena/maintainability
+   :alt: Maintainability
+
+.. image:: https://api.codeclimate.com/v1/badges/e2ba8628f5a30a4a1fc8/test_coverage
+   :target: https://codeclimate.com/github/jlane9/mockerena/test_coverage
+   :alt: Test Coverage
+
+.. image:: https://readthedocs.org/projects/mockerena/badge/?version=latest
+   :target: https://mockerena.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
+.. image:: https://requires.io/github/jlane9/mockerena/requirements.svg?branch=master
+   :target: https://requires.io/github/jlane9/mockerena/requirements/?branch=master
+   :alt: Requirements Status
+
 Mockerena allows anyone to mock data files through customized json schemas and provides routes for external systems to retrieve from it.
 
 .. toctree::
