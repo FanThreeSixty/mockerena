@@ -128,42 +128,25 @@ def test_function_bool(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_concat(client):
+def test_function_concat(client, sample_schema):
     """Test to ensure concat function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": ["hello"],
-                }
-            },
-            {
-                "name": "bar",
-                "type": "random_element",
-                "args": {
-                    "elements": ["world"],
-                }
-            },
-            {
-                "name": "baz",
-                "type": "random_int",
-                "function": "concat(field['foo'], field['bar'])"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["hello"]}
+    sample_schema["columns"][1]["args"] = {"elements": ["world"]}
+    sample_schema["columns"].append({
+        "name": "baz",
+        "type": "pybool",
+        "function": "concat(field['foo'], field['bar'])"
+    })
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['baz'] == "helloworld"
@@ -346,42 +329,25 @@ def test_function_month(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_pow(client):
+def test_function_pow(client, sample_schema):
     """Test to ensure pow function works
 
     :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
     :return:
     """
 
-    data = {
-        "schema": "test_schema",
-        "num_rows": 1,
-        "file_format": "json",
-        "file_name": "test_{}_schema",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": [2],
-                }
-            },
-            {
-                "name": "bar",
-                "type": "random_element",
-                "args": {
-                    "elements": [3],
-                }
-            },
-            {
-                "name": "baz",
-                "type": "random_element",
-                "function": "pow(field['foo'], field['bar'])"
-            }
-        ]
-    }
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": [2]}
+    sample_schema["columns"][1]["args"] = {"elements": [3]}
+    sample_schema["columns"].append({
+        "name": "baz",
+        "type": "random_element",
+        "function": "pow(field['foo'], field['bar'])"
+    })
 
-    res = client.post(url_for('custom_schema'), json=data, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['baz'] == 8

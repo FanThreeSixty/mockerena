@@ -4,9 +4,34 @@
 
 """
 
+from copy import deepcopy
 from flask import url_for
 import pytest
 from mockerena.app import app as server
+
+
+MOCK_SCHEMA = {
+    "schema": "mock_example",
+    "num_rows": 10,
+    "file_format": "csv",
+    "file_name": "mock_{}_example",
+    "columns": [
+        {
+            "name": "foo",
+            "type": "random_element",
+            "args": {
+                "elements": ["this"],
+            }
+        },
+        {
+            "name": "bar",
+            "type": "random_element",
+            "args": {
+                "elements": ["that"],
+            }
+        }
+    ]
+}
 
 
 @pytest.fixture(scope="session")
@@ -26,28 +51,7 @@ def sample_schema():
     :return:
     """
 
-    return {
-        "schema": "mock_example",
-        "num_rows": 100,
-        "file_format": "csv",
-        "file_name": "mock_{}_example",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": ["this"],
-                }
-            },
-            {
-                "name": "bar",
-                "type": "random_element",
-                "args": {
-                    "elements": ["that"],
-                }
-            }
-        ]
-    }
+    return deepcopy(MOCK_SCHEMA)
 
 
 @pytest.fixture(autouse=True)
@@ -58,28 +62,7 @@ def setup_data(client):
     :return:
     """
 
-    data = {
-        "schema": "mock_example",
-        "num_rows": 10,
-        "file_format": "csv",
-        "file_name": "mock_{}_example",
-        "columns": [
-            {
-                "name": "foo",
-                "type": "random_element",
-                "args": {
-                    "elements": ["this"],
-                }
-            },
-            {
-                "name": "bar",
-                "type": "random_element",
-                "args": {
-                    "elements": ["that"],
-                }
-            }
-        ]
-    }
+    data = deepcopy(MOCK_SCHEMA)
 
     # Setup
     if not client.get(url_for('schema|item_lookup', _id='mock_example')).status_code == 200:
