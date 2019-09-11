@@ -55,6 +55,7 @@ Mockerena allows anyone to mock data files through customized json schemas and p
    Usage <usage>
    Routes <routes>
    API Reference <api>
+   About Us <https://www.fanthreesixty.com/about-us/>
 
 
 
