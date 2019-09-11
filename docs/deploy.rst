@@ -27,6 +27,19 @@ Once the deploy is complete, run ``sls info`` to get the endpoint:
     sls info
 
 
+-----------------
+Docker deployment
+-----------------
+
+
+.. code-block:: bash
+
+    docker build -t mockerena .
+    docker run -it -p 5000:5000 mockerena
+
+    # Or using docker compose
+    docker-compose up -d
+
 ----------------
 Local deployment
 ----------------
@@ -38,6 +51,13 @@ To run a serverless setup locally, run:
     sls wsgi serve
 
 Navigate to `localhost:5000 <http://localhost:5000>`_ to see your app running locally.
+
+
+Or you can deploy manually running this command in your ``init.d`` or ``systemctl`` scripts:
+
+.. code-block:: bash
+
+    gunicorn3 --config gunicorn_config.py mockerena.app:app
 
 -------------
 Configuration
