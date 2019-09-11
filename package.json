@@ -1,7 +1,7 @@
 {
   "name": "mockerena",
   "description": "Mock data providers for data integrations",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "docs": "script/docs",
     "postsetup": "node postsetup.js",
