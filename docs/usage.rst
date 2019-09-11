@@ -68,7 +68,7 @@ On a column-level:
 
     *args* - Arguments passed into type
 
-    *function* - Post-processing function
+    *function* - Post-processing function (`see below <#functions>`_)
 
 
 To generate data, GET to ``/api/schema/{schema_id}/generate``. You should receive something like this:
@@ -88,3 +88,14 @@ To generate data, GET to ``/api/schema/{schema_id}/generate``. You should receiv
     television,thatthat
 
 You can optionally POST to ``/api/schema/generate`` directly to generate data without having to permanently save the schema.
+
+---------
+Functions
+---------
+
+
+Mockerena mostly uses ``Faker`` providers to generate random data.
+`Click here <https://faker.readthedocs.io/en/master/providers.html>`_ for the full list of providers from ``Faker``.
+With Mockerena, we've supplied a few additional providers that are available `here <https://mockerena.readthedocs.io/en/latest/source/mockerena.html#module-mockerena.providers>`_.
+
+You can also use the types endpoint ``/api/types`` to retrieve a complete list of all provider types.

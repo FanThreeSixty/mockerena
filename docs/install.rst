@@ -23,8 +23,15 @@ To install dependencies yourself:
 .. code-block:: bash
 
     cd mockerena
+
+    # For Unix environments
     virtualenv -p python3 venv
     source venv/bin/activate
+
+    # For Windows environments
+    python -m venv venv/
+    venv/Scripts/activate.bat
+
     pip install -r requirements.txt
     pip install -e .
 
