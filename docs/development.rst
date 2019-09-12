@@ -59,7 +59,7 @@ Once the dependencies are installed you can run pytest yourself:
 
 .. code-block:: bash
 
-    pytest
+    pytest tests/
 
 Or you can use the script:
 

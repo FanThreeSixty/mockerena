@@ -2,7 +2,10 @@
 Using Mockerena
 ===============
 
-To generate fake data you can either 1) save schemas and generate data using an id or 2) you can generate data on-the-fly.
+To generate fake data you can either:
+
+1) save schemas and generate data using an id or
+2) you can generate data on-the-fly.
 
 
 To save a schema, POST to ``/api/schema``:

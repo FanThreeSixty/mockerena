@@ -6,7 +6,9 @@ Deployment
 Deploy to AWS
 -------------
 
-First you'll need to install the serverless cli:
+First you'll need to install the AWS CLI and configure. For more information on these steps,
+please visit `Amazon's documentation <https://docs.aws.amazon.com/transcribe/latest/dg/setup-asc-awscli.html>`_ for further details.
+Once the CLI is installed you'll need to install the serverless cli:
 
 .. code-block:: bash
 
@@ -25,7 +27,6 @@ Once the deploy is complete, run ``sls info`` to get the endpoint:
 .. code-block:: bash
 
     sls info
-
 
 -----------------
 Docker deployment
