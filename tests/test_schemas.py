@@ -257,3 +257,23 @@ def test_generate_date_format(client, sample_schema):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert datetime.strptime(res.json[0]["foo"], "%Y-%m-%d")
+
+
+@pytest.mark.generate
+@pytest.mark.schema
+def test_generate_without_type(client, sample_schema):
+    """Test to ensure columns without type default to empty
+
+    :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :return:
+    """
+
+    sample_schema["file_format"] = "json"
+    del sample_schema["columns"][0]["type"]
+    del sample_schema["columns"][0]["args"]
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]["foo"] == ""
