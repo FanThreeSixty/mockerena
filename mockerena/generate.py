@@ -17,14 +17,32 @@ fake = Faker()
 fake.add_provider(MockProvider)
 
 
+def age(date: datetime.datetime) -> int:
+    """Returns age in years for a given date
+
+    :param datetime.datetime date: Datetime or date
+    :return:
+    """
+
+    now = datetime.date.today()
+
+    if isinstance(date, (datetime.date, datetime.datetime)):
+        return now.year - date.year - 1 \
+            if now.month < date.month or (now.month == date.month and now.day < date.day) else now.year - date.year
+
+    return date
+
+
 APPROVED_GLOBALS = {
     'abs': abs,
+    'age': age,
     'bool': bool,
     'concat': lambda *args: "".join(args),
     'day': lambda d: d.day if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'epoch': lambda d: d.timestamp() if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'fake': fake,
     'float': float,
+    'format_date': datetime.datetime.strftime,
     'hash': hash,
     'int': int,
     'isinstance': isinstance,
