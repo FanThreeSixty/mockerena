@@ -32,6 +32,7 @@ SCHEMA = {
         },
         "include_header": {"type": "boolean"},
         "include_null": {"type": "boolean"},
+        "is_nested": {"type": "boolean"},
         "delimiter": {"type": "string"},
         "quote_character": {"type": "string"},
         "template": {
@@ -58,8 +59,8 @@ SCHEMA = {
             }
         }
     },
-    'additional_lookup': {
-        'url': 'regex("[\\w]+")',
-        'field': 'schema'
+    "additional_lookup": {
+        "url": 'regex("[\\w]+")',
+        "field": "schema"
     },
 }

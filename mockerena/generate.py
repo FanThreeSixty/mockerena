@@ -21,8 +21,8 @@ APPROVED_GLOBALS = {
     'abs': abs,
     'bool': bool,
     'concat': lambda *args: "".join(args),
-    'day': lambda d: d.day if isinstance(d, datetime.datetime) else d,
-    'epoch': lambda d: d.timestamp() if isinstance(d, datetime.datetime) else d,
+    'day': lambda d: d.day if isinstance(d, (datetime.datetime, datetime.date)) else d,
+    'epoch': lambda d: d.timestamp() if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'fake': fake,
     'float': float,
     'hash': hash,
@@ -31,7 +31,7 @@ APPROVED_GLOBALS = {
     'join': lambda l, d: d.join(l) if isinstance(d, str) and isinstance(l, (list, tuple)) else '',
     'len': len,
     'lower': lambda s: str(s).lower(),
-    'month': lambda d: d.month if isinstance(d, datetime.datetime) else d,
+    'month': lambda d: d.month if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'now': datetime.datetime.now,
     'pow': pow,
     'request_param': lambda param: request.args.get(param, None),
@@ -42,7 +42,7 @@ APPROVED_GLOBALS = {
     'sum': sum,
     'time': lambda d: d.time() if isinstance(d, datetime.datetime) else d,
     'upper': lambda s: str(s).upper(),
-    'year': lambda d: d.year if isinstance(d, datetime.datetime) else d
+    'year': lambda d: d.year if isinstance(d, (datetime.datetime, datetime.date)) else d
 }
 
 APPROVED_TERMS = [
@@ -50,9 +50,9 @@ APPROVED_TERMS = [
     "(?:and|f?or|!=|={2}|i[sn]|not|>=?|<=?|)",  # Logic
     "(?:if|else)",  # Conditionals
     "(?:True|False|None|-?\\d+|\"{2}|\'{2}|\'[\\w\\\\/,: ]+\'|\"[\\w\\\\/,: ]+\")",  # Built-ins
-    f"(?:{'|'.join(APPROVED_GLOBALS)})\\.?\\([\\w\\'\\\"\\[\\]\\(\\)\\\\+*,-: ]+\\)",  # Functions
+    f"(?:{'|'.join(APPROVED_GLOBALS)})\\.?\\([\\w\\'\\\"\\[\\]\\(\\)\\\\+\\%*,-: ]+\\)",  # Functions
     "(?:fake|request_param)\\.[\\w]+\\([\\w\\'\\\"\\[\\]\\(\\)\\{\\}\\+*,-: ]+\\)",  # Faker
-    "(?:this|field\\[[\'\"][\\w ]+[\'\"]\\])",  # Variables
+    "(?:this|field\\[[\'\"][\\w\\. ]+[\'\"]\\])",  # Variables
     "\\[-?\\d+(?: ?\\: ?-?\\d+)?\\]",  # Slicing
     " "  # Whitespace
 ]

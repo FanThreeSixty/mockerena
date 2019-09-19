@@ -20,14 +20,14 @@ MOCK_SCHEMA = {
             "name": "foo",
             "type": "random_element",
             "args": {
-                "elements": ["this"],
+                "elements": ["this"]
             }
         },
         {
             "name": "bar",
             "type": "random_element",
             "args": {
-                "elements": ["that"],
+                "elements": ["that"]
             }
         }
     ]

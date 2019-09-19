@@ -392,6 +392,7 @@ TEMPLATE = {
             "name": "projection",
             "description": "Conditional query where the user dictates which fields should be returned by the API",
             "required": False,
+            "type": "object",
             "example": '{"schema": 1}'
         },
         "file_format": {
@@ -439,9 +440,7 @@ TEMPLATE = {
             "name": "If-Match",
             "description": "Current value of the _etag field",
             "required": True,
-            "schema": {
-                "type": "string"
-            }
+            "type": "string"
         }
     },
     "responses": {
