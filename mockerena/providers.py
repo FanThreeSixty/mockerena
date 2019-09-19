@@ -15,6 +15,15 @@ class MockProvider(BaseProvider):
     """
 
     # noinspection PyMethodMayBeStatic
+    def empty(self) -> str:  # pylint: disable=R0201
+        """Returns an empty response
+
+        :return:
+        """
+
+        return ''
+
+    # noinspection PyMethodMayBeStatic
     def regex(self, expression: str = '') -> str:  # pylint: disable=R0201
         """Returns a string generated from a regular expression
 
