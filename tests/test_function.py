@@ -108,6 +108,27 @@ def test_function_abs(client, sample_schema):
 
 
 @pytest.mark.function
+def test_function_age_rounding(client, sample_schema):
+    """Test to ensure only whole years are counted for age function
+
+    :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :return:
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["type"] = "date_between"
+    sample_schema["columns"][0]["args"] = {"start_date": "-364d", "end_date": "-363d"}
+    sample_schema["columns"][0]["function"] = "age(this)"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]['foo'] == 0
+
+
+@pytest.mark.function
 def test_function_bool(client, sample_schema):
     """Test to ensure bool function works
 
@@ -169,6 +190,25 @@ def test_function_day(client, sample_schema):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == datetime.now().day
+
+
+@pytest.mark.function
+def test_function_format_date(client, sample_schema):
+    """Test to ensure date formatting function works
+
+    :param Flask client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :return:
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["function"] = "format_date(now(), '%Y-%m-%d')"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]['foo'] == datetime.now().strftime('%Y-%m-%d')
 
 
 @pytest.mark.function
