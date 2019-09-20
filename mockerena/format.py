@@ -8,6 +8,7 @@
 import datetime
 from functools import reduce
 import json
+import random
 from typing import Any
 
 from flask import make_response, request
@@ -17,7 +18,7 @@ import pandas as pd
 from mockerena.errors import ERROR_422
 from mockerena.generate import fake
 from mockerena.settings import DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, DEFAULT_QUOTE_CHARACTER,\
-    DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, DEFAULT_IS_NESTED
+    DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, DEFAULT_IS_NESTED, DEFAULT_RESPONSES
 
 
 def to_boolean(var: Any) -> bool:
@@ -71,18 +72,29 @@ def format_output(mock: dict, schema: dict):  # pylint: disable=R0914
     is_nested = schema.get('is_nested', DEFAULT_IS_NESTED)
     truncated_columns = [column['name'] for column in filter(lambda c: c.get('truncate', False), schema.get('columns'))]
 
+    # Determine how the service will respond
+    responses = schema.get('responses', DEFAULT_RESPONSES)
+    responses = responses if isinstance(responses, (list, tuple)) and responses else DEFAULT_RESPONSES
+    response = random.choices(responses, weights=[response.get('weight', 1) for response in responses])[0]
+    status_code = response.get('status_code', 200)
+    headers = response.get('headers', None)
+
     # Remove truncated columns
     for column in truncated_columns:
         mock.pop(column, None)
 
-    if file_format in ('csv', 'tsv'):
+    if isinstance(response.get('data'), str):
+        content = response.get('data')
+        content_type = response.get('content_type', 'text/plain')
+
+    elif file_format in ('csv', 'tsv'):
         _delimiter = delimiter or ('\t' if file_format == 'tsv' else ',')
         content = _format_pandas(mock, _delimiter, include_header, quote_character)
-        content_type = 'text/csv'
+        content_type = response.get('content_type', 'text/csv')
 
     elif file_format == 'json':
         content = _format_json(mock, sep=key_separator, exclude_null=exclude_null, is_nested=is_nested)
-        content_type = 'application/json'
+        content_type = response.get('content_type', 'application/json')
 
     elif file_format == 'sql':
 
@@ -92,7 +104,7 @@ def format_output(mock: dict, schema: dict):  # pylint: disable=R0914
         table_name = schema.get('table_name', 'EXAMPLE_DATA')
         fields = ', '.join(mock.keys())
         content = "\n".join([f"INSERT INTO {table_name} ({fields}) VALUES {get_row(row)};" for row in range(0, size)])
-        content_type = 'application/sql'
+        content_type = response.get('content_type', 'application/sql')
 
     elif schema.get('template', None):
 
@@ -104,7 +116,7 @@ def format_output(mock: dict, schema: dict):  # pylint: disable=R0914
         }
 
         content = _format_template(mock, schema, **key_words)
-        content_type = f'text/{file_format}'
+        content_type = response.get('content_type', f'text/{file_format}')
 
     else:
 
@@ -121,9 +133,14 @@ def format_output(mock: dict, schema: dict):  # pylint: disable=R0914
     now = datetime.datetime.now().strftime("%Y%m%d%H%M")
     filename = schema.get('file_name').format(now)
 
-    resp = make_response(content)
+    resp = make_response(content, status_code)
     resp.headers["Content-Type"] = content_type
-    resp.headers['Content-Disposition'] = f'attachment; filename={filename}.{file_format}'
+    resp.headers["Content-Disposition"] = f'attachment; filename={filename}.{file_format}'
+
+    if headers:
+        for header in headers:
+            resp.headers[header] = headers[header]
+
     return resp
 
 
