@@ -17,17 +17,70 @@ from eve import Eve
 from faker.providers import BaseProvider
 from flasgger import Swagger, swag_from
 from flask import request, render_template
+from healthcheck import HealthCheck, EnvironmentDump
+from pymongo.errors import ServerSelectionTimeoutError
 
+from mockerena import __author__, __email__, __version__
 from mockerena.errors import ERROR_404, ERROR_422
 from mockerena.format import format_output
 from mockerena.generate import fake, generate_data
-from mockerena.settings import DEBUG, ENV, HOST, PORT, SECRET_KEY
+from mockerena.settings import DEBUG, DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, \
+    DEFAULT_QUOTE_CHARACTER, DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, \
+    DEFAULT_IS_NESTED, DEFAULT_RESPONSES, ENV, HOST, PORT, SECRET_KEY
 from mockerena.swagger import TEMPLATE
 
 
 app = Eve(__name__, settings=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.py'))
+envdump = EnvironmentDump(include_python=False, include_process=False)
+health = HealthCheck()
 swagger = Swagger(app, template=TEMPLATE)
 app.config.update(ENV=ENV, DEBUG=DEBUG, SECRET_KEY=SECRET_KEY)
+
+
+def application_data():
+    """Returns information about the application
+
+    :return:
+    """
+
+    return {
+        "version": __version__,
+        "maintainer": __author__,
+        "maintainer_email": __email__,
+        "git_repo": "https://github.com/FanThreeSixty/mockerena"
+    }
+
+
+def application_settings():
+    """Returns application settings
+
+    :return:
+    """
+
+    return {
+        "DEFAULT_FILE_FORMAT": DEFAULT_FILE_FORMAT,
+        "DEFAULT_INCLUDE_HEAD": DEFAULT_INCLUDE_HEAD,
+        "DEFAULT_SIZE": DEFAULT_SIZE,
+        "DEFAULT_QUOTE_CHARACTER": DEFAULT_QUOTE_CHARACTER,
+        "DEFAULT_EXCLUDE_NULL": DEFAULT_EXCLUDE_NULL,
+        "DEFAULT_DELIMITER": DEFAULT_DELIMITER,
+        "DEFAULT_KEY_SEPARATOR": DEFAULT_KEY_SEPARATOR,
+        "DEFAULT_IS_NESTED": DEFAULT_IS_NESTED,
+        "DEFAULT_RESPONSES": DEFAULT_RESPONSES
+    }
+
+
+def mongo_available():
+    """Return status of mongo connection
+
+    :return:
+    """
+
+    try:
+        app.data.driver.db.client.server_info()
+        return True, "mongo up"
+    except ServerSelectionTimeoutError:
+        return False, "mongo down"
 
 
 def get_provider_types() -> dict:
@@ -125,6 +178,15 @@ def get_types() -> tuple:
     """
 
     return json.dumps(get_provider_types()), 200, {'Content-Type': 'application/json'}
+
+
+# Add environment and health check routes
+envdump.add_section("application", application_data)
+envdump.add_section("settings", application_settings)
+health.add_check(mongo_available)
+health.add_section("version", __version__)
+app.add_url_rule("/healthcheck", "healthcheck", view_func=health.run)
+app.add_url_rule("/environment", "environment", view_func=envdump.run)
 
 
 if __name__ != '__main__':  # pragma: no cover

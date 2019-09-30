@@ -45,7 +45,8 @@ setup(
         "flasgger>=0.9.0",
         "Flask>=1.0.0",
         "Jinja2>=2.10",
-        "pandas>=0.24.0"
+        "pandas>=0.24.0",
+        "py-healthcheck>=1.9.0"
     ],
     python_requires=">=3.6",
     setup_requires=["pytest-runner"],
