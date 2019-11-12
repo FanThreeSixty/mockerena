@@ -5,15 +5,16 @@
 """
 
 from flask import url_for
+from eve import Eve
 import pytest
 
 
 @pytest.mark.example
-def test_example(client):
+def test_example(client: Eve):
     """Example test for reference
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     res = client.get(url_for('generate', schema_id='mock_example'))

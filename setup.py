@@ -10,11 +10,12 @@ from setuptools import setup
 from mockerena import __author__, __email__, __license__, __version__
 
 
-def read(filename):
+def read(filename: str) -> str:
     """Utility function to read the README file
 
     :param str filename: File name
-    :return:
+    :return: File contents
+    :rtype: str
     """
 
     return open(os.path.join(os.path.dirname(__file__), filename)).read()

@@ -7,6 +7,7 @@
 import datetime
 import random
 import re
+from typing import Union
 
 from faker import Faker
 from flask import request
@@ -17,11 +18,13 @@ fake = Faker()
 fake.add_provider(MockProvider)
 
 
-def age(date: datetime.datetime) -> int:
+def age(date: Union[datetime.datetime, datetime.date]) -> int:
     """Returns age in years for a given date
 
-    :param datetime.datetime date: Datetime or date
-    :return:
+    :param Union[datetime.datetime, datetime.date] date: Datetime or date
+    :return: Age of date since today
+    :rtype: int
+    :raises: TypeError
     """
 
     now = datetime.date.today()
@@ -82,7 +85,8 @@ def is_safe(expression: str) -> bool:
     """Returns true if the expression is safe to execute
 
     :param str expression: Python expression
-    :return:
+    :return: True, if the expression is safe to run
+    :rtype: bool
     """
 
     return bool(re.match(PATTERN, expression))
@@ -94,7 +98,8 @@ def data_for_column(column: dict, kwargs: dict, size: int) -> list:
     :param dict column: Column definition
     :param dict kwargs: Faker keyword arguments
     :param int size: Number of rows
-    :return:
+    :return: List of random data for a column
+    :rtype: list
     """
 
     data = []
@@ -121,7 +126,8 @@ def generate_data(schema: dict) -> dict:
     """Generates sample data from a schema
 
     :param dict schema: Provider integration data schema
-    :return:
+    :return: Mapping of generated data
+    :rtype: dict
     """
 
     size = int(request.args.get('numrows', schema.get('num_rows', DEFAULT_SIZE)))

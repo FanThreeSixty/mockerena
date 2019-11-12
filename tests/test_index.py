@@ -5,15 +5,16 @@
 """
 
 from flask import url_for
+from eve import Eve
 import pytest
 
 
 @pytest.mark.index
-def test_index(client):
+def test_index(client: Eve):
     """To to ensure index page successfully returns
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     res = client.get(url_for('index'))

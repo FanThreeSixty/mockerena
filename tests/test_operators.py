@@ -4,7 +4,9 @@
 
 """
 
+from typing import Any
 from flask import url_for
+from eve import Eve
 import pytest
 
 
@@ -29,14 +31,14 @@ import pytest
     ("False or True", True),
     ("2 in range(1, 10)", True)
 ])
-def test_operators(client, sample_schema, function, result):
+def test_operators(client: Eve, sample_schema: dict, function: str, result: Any):
     """Test to ensure all operators are accepted
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
     :param str function: Column function
-    :param int result: Function result
-    :return:
+    :param Any result: Function result
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1

@@ -18,7 +18,8 @@ class MockProvider(BaseProvider):
     def empty(self) -> str:  # pylint: disable=R0201
         """Returns an empty response
 
-        :return:
+        :return: An empty string
+        :rtype: str
         """
 
         return ''
@@ -28,7 +29,8 @@ class MockProvider(BaseProvider):
         """Returns a string generated from a regular expression
 
         :param str expression: Regular expression
-        :return:
+        :return: A string generated from a regular expression
+        :rtype: str
         """
 
         return exrex.getone(expression if isinstance(expression, str) else '')
@@ -53,7 +55,9 @@ class MockProvider(BaseProvider):
 
         :param list elements: List of choices
         :param list weights: Weights to give each choice. Must be equal length to elements
-        :return:
+        :return: A single element from the list
+        :rtype: Any
+        :raises: AssertionError
         """
 
         assert all([isinstance(attr, (list, tuple)) for attr in (elements, weights)]) and len(elements) == len(weights)

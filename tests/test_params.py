@@ -4,17 +4,18 @@
 
 """
 
+from eve import Eve
 from flask import url_for
 import pytest
 
 
 @pytest.mark.params
 @pytest.mark.num_rows
-def test_num_rows(client):
+def test_num_rows(client: Eve):
     """Test to ensure number of rows can be overridden
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': 100})
@@ -25,11 +26,11 @@ def test_num_rows(client):
 
 @pytest.mark.params
 @pytest.mark.include_header
-def test_include_header(client):
+def test_include_header(client: Eve):
     """Test to ensure include header can be overridden
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     url = url_for('generate', schema_id='mock_example')
@@ -42,11 +43,11 @@ def test_include_header(client):
 
 @pytest.mark.params
 @pytest.mark.file_format
-def test_file_format(client):
+def test_file_format(client: Eve):
     """Test to ensure file format can be overridden
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     url = url_for('generate', schema_id='mock_example')

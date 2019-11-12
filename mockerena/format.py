@@ -25,18 +25,20 @@ def to_boolean(var: Any) -> bool:
     """Convert string or object to boolean
 
     :param var: String or object
-    :return:
+    :return: Boolean value
+    :rtype: bool
     """
 
     return var.lower() in ("true", "yes", "y", "1") if isinstance(var, str) else bool(var)
 
 
-def un_flatten(data: dict, separator: str = '.'):
+def un_flatten(data: dict, separator: str = '.') -> dict:
     """Un-flatten a dictionary
 
     :param dict data: Dictionary data
     :param str separator: Key separator
-    :return:
+    :return: Un-flattened dictionary
+    :rtype: dict
     """
 
     def _un_flatten(acc: dict, item: tuple) -> dict:
@@ -44,7 +46,8 @@ def un_flatten(data: dict, separator: str = '.'):
 
         :param dict acc: Dictionary data output
         :param tuple item: Key, value pairs
-        :return:
+        :return: Un-flattened dictionary
+        :rtype: dict
         """
 
         key, *terms = str(item[0]).split(separator, 1)
@@ -54,12 +57,13 @@ def un_flatten(data: dict, separator: str = '.'):
     return reduce(_un_flatten, data.items(), {})
 
 
-def format_output(mock: dict, schema: dict):  # pylint: disable=R0914
+def format_output(mock: dict, schema: dict) -> tuple:  # pylint: disable=R0914
     """Formats output as defined in schema
 
     :param dict mock: Mock data
     :param dict schema: Provider integration data schema
-    :return:
+    :return: A http response
+    :rtype: tuple
     """
 
     file_format = request.args.get('file_format', schema.get('file_format', DEFAULT_FILE_FORMAT))
@@ -151,7 +155,8 @@ def _format_pandas(mock: dict, sep: str, header: bool, quote_character: str = '"
     :param str sep: Column delimiter
     :param bool header: File headers if any
     :param str quote_character: Character used to quote fields
-    :return:
+    :return: Pandas data frame as CSV
+    :rtype: str
     """
 
     return pd.DataFrame(mock).to_csv(sep=sep, index=None, header=header, quotechar=quote_character)
@@ -164,7 +169,8 @@ def _format_json(mock: dict, sep: str, exclude_null: bool = False, is_nested: bo
     :param str sep: Nested attribute key separator
     :param bool exclude_null: Exclude null entries
     :param bool is_nested: Un-flatten json by separating keys
-    :return:
+    :return: JSON string
+    :rtype: str
     """
 
     data_frame = pd.DataFrame(mock)
@@ -177,7 +183,8 @@ def _format_template(mock: dict, schema: dict, **kwargs) -> str:
 
     :param dict mock: Mock data
     :param dict schema: Provider integration data schema
-    :return:
+    :return: Rendered template
+    :rtype: str
     """
 
     data = pd.DataFrame(mock).to_dict(orient='records')
