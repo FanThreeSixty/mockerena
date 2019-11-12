@@ -5,17 +5,18 @@
 """
 
 import datetime
+from eve import Eve
 from flask import url_for
 import pytest
 
 
 @pytest.mark.responses
-def test_response_override_status_code(client, sample_schema):
-    """Test to ensure data can be overriden on a response
+def test_response_override_status_code(client: Eve, sample_schema: dict):
+    """Test to ensure status code can be overridden on a response
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -26,12 +27,12 @@ def test_response_override_status_code(client, sample_schema):
 
 
 @pytest.mark.responses
-def test_response_override_data(client, sample_schema):
-    """Test to ensure data can be overriden on a response
+def test_response_override_data(client: Eve, sample_schema: dict):
+    """Test to ensure data can be overridden on a response
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -44,12 +45,12 @@ def test_response_override_data(client, sample_schema):
 
 
 @pytest.mark.responses
-def test_response_override_content_type(client, sample_schema):
-    """Test to ensure data can be overriden on a response
+def test_response_override_content_type(client: Eve, sample_schema: dict):
+    """Test to ensure content type can be overridden on a response
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -61,12 +62,12 @@ def test_response_override_content_type(client, sample_schema):
 
 
 @pytest.mark.responses
-def test_response_custom_header(client, sample_schema):
-    """Test to ensure data can be overriden on a response
+def test_response_custom_header(client: Eve, sample_schema: dict):
+    """Test to ensure headers can be overridden on a response
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["responses"] = [{"headers": {"Last-Modified": "Thur, 19 Sep 2019 19:25:10 GMT"}}]

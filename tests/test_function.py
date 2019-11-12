@@ -7,16 +7,17 @@
 from datetime import datetime
 
 from flask import url_for
+from eve import Eve
 import pytest
 
 
 @pytest.mark.function
-def test_function_field(client, sample_schema):
+def test_function_field(client: Eve, sample_schema: dict):
     """Test to ensure field option works in function
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -29,12 +30,12 @@ def test_function_field(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_this(client, sample_schema):
+def test_function_this(client: Eve, sample_schema: dict):
     """Test to ensure this option works in function
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -48,12 +49,12 @@ def test_function_this(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_conditionals(client, sample_schema):
+def test_function_conditionals(client: Eve, sample_schema: dict):
     """Test to ensure built-in 'None' works in function
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 10
@@ -69,12 +70,12 @@ def test_function_conditionals(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_restrict(client, sample_schema):
+def test_function_restrict(client: Eve, sample_schema: dict):
     """Test to ensure function restricts use
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -87,12 +88,12 @@ def test_function_restrict(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_abs(client, sample_schema):
+def test_function_abs(client: Eve, sample_schema: dict):
     """Test to ensure abs function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -108,12 +109,12 @@ def test_function_abs(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_age_rounding(client, sample_schema):
+def test_function_age_rounding(client: Eve, sample_schema: dict):
     """Test to ensure only whole years are counted for age function
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -129,12 +130,12 @@ def test_function_age_rounding(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_bool(client, sample_schema):
+def test_function_bool(client: Eve, sample_schema: dict):
     """Test to ensure bool function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -149,12 +150,12 @@ def test_function_bool(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_concat(client, sample_schema):
+def test_function_concat(client: Eve, sample_schema: dict):
     """Test to ensure concat function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -174,12 +175,12 @@ def test_function_concat(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_day(client, sample_schema):
+def test_function_day(client: Eve, sample_schema: dict):
     """Test to ensure day function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -193,12 +194,12 @@ def test_function_day(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_format_date(client, sample_schema):
+def test_function_format_date(client: Eve, sample_schema: dict):
     """Test to ensure date formatting function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -212,12 +213,12 @@ def test_function_format_date(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_float(client, sample_schema):
+def test_function_float(client: Eve, sample_schema: dict):
     """Test to ensure float function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -233,12 +234,12 @@ def test_function_float(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_hash(client, sample_schema):
+def test_function_hash(client: Eve, sample_schema: dict):
     """Test to ensure hash function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -252,12 +253,12 @@ def test_function_hash(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_int(client, sample_schema):
+def test_function_int(client: Eve, sample_schema: dict):
     """Test to ensure int function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -272,12 +273,12 @@ def test_function_int(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_isinstance(client, sample_schema):
+def test_function_isinstance(client: Eve, sample_schema: dict):
     """Test to ensure isinstance function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -292,12 +293,12 @@ def test_function_isinstance(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_join(client, sample_schema):
+def test_function_join(client: Eve, sample_schema: dict):
     """Test to ensure join function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -313,12 +314,12 @@ def test_function_join(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_len(client, sample_schema):
+def test_function_len(client: Eve, sample_schema: dict):
     """Test to ensure len function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -331,12 +332,12 @@ def test_function_len(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_lower(client, sample_schema):
+def test_function_lower(client: Eve, sample_schema: dict):
     """Test to ensure lower function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -351,12 +352,12 @@ def test_function_lower(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_month(client, sample_schema):
+def test_function_month(client: Eve, sample_schema: dict):
     """Test to ensure month function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -369,12 +370,12 @@ def test_function_month(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_pow(client, sample_schema):
+def test_function_pow(client: Eve, sample_schema: dict):
     """Test to ensure pow function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -394,12 +395,12 @@ def test_function_pow(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_round(client, sample_schema):
+def test_function_round(client: Eve, sample_schema: dict):
     """Test to ensure round function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -414,12 +415,12 @@ def test_function_round(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_split(client, sample_schema):
+def test_function_split(client: Eve, sample_schema: dict):
     """Test to ensure split function works
 
     :param Flask client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -434,12 +435,12 @@ def test_function_split(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_str(client, sample_schema):
+def test_function_str(client: Eve, sample_schema: dict):
     """Test to ensure str function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -454,12 +455,12 @@ def test_function_str(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_sum(client, sample_schema):
+def test_function_sum(client: Eve, sample_schema: dict):
     """Test to ensure sum function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -481,12 +482,12 @@ def test_function_sum(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_upper(client, sample_schema):
+def test_function_upper(client: Eve, sample_schema: dict):
     """Test to ensure upper function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -499,12 +500,12 @@ def test_function_upper(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_year(client, sample_schema):
+def test_function_year(client: Eve, sample_schema: dict):
     """Test to ensure year function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -517,12 +518,12 @@ def test_function_year(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_epoch(client, sample_schema):
+def test_function_epoch(client: Eve, sample_schema: dict):
     """Test to ensure epoch function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -535,12 +536,12 @@ def test_function_epoch(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_time(client, sample_schema):
+def test_function_time(client: Eve, sample_schema: dict):
     """Test to ensure time function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -553,12 +554,12 @@ def test_function_time(client, sample_schema):
 
 
 @pytest.mark.function
-def test_function_request_param(client, sample_schema):
+def test_function_request_param(client: Eve, sample_schema: dict):
     """Test to ensure request parameter function works
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1

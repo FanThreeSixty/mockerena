@@ -4,18 +4,19 @@
 
 """
 
+from eve import Eve
 from flask import url_for
 import pytest
 
 
 @pytest.mark.price
 @pytest.mark.provider
-def test_provider_price(client, sample_schema):
+def test_provider_price(client: Eve, sample_schema: dict):
     """Test to ensure data can be generated for price
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -30,12 +31,12 @@ def test_provider_price(client, sample_schema):
 
 @pytest.mark.regex
 @pytest.mark.provider
-def test_provider_regex(client, sample_schema):
+def test_provider_regex(client: Eve, sample_schema: dict):
     """Test to ensure data can be generated for regex
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -50,12 +51,12 @@ def test_provider_regex(client, sample_schema):
 
 @pytest.mark.regex
 @pytest.mark.provider
-def test_provider_weighted_choice(client, sample_schema):
+def test_provider_weighted_choice(client: Eve, sample_schema: dict):
     """Test to ensure data can be generated for weighted choice
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -73,12 +74,12 @@ def test_provider_weighted_choice(client, sample_schema):
 
 @pytest.mark.empty
 @pytest.mark.provider
-def test_provider_empty(client, sample_schema):
+def test_provider_empty(client: Eve, sample_schema: dict):
     """Test to ensure that empty returns an empty string
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"

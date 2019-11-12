@@ -37,10 +37,11 @@ swagger = Swagger(app, template=TEMPLATE)
 app.config.update(ENV=ENV, DEBUG=DEBUG, SECRET_KEY=SECRET_KEY)
 
 
-def application_data():
+def application_data() -> dict:
     """Returns information about the application
 
-    :return:
+    :return: A map of application information
+    :rtype: dict
     """
 
     return {
@@ -51,10 +52,11 @@ def application_data():
     }
 
 
-def application_settings():
+def application_settings() -> dict:
     """Returns application settings
 
-    :return:
+    :return: A map of application settings
+    :rtype: dict
     """
 
     return {
@@ -70,10 +72,11 @@ def application_settings():
     }
 
 
-def mongo_available():
+def mongo_available() -> tuple:
     """Return status of mongo connection
 
-    :return:
+    :return: Tuple with boolean and text status
+    :rtype: tuple
     """
 
     try:
@@ -86,7 +89,8 @@ def mongo_available():
 def get_provider_types() -> dict:
     """Returns all available generator types
 
-    :return:
+    :return: Mapping of all generator types
+    :rtype: dict
     """
 
     def is_generator(method):
@@ -95,11 +99,12 @@ def get_provider_types() -> dict:
     return {gen[0]: inspect.getdoc(gen[1]) for gen in inspect.getmembers(fake, predicate=is_generator)}
 
 
-def generate_and_format(schema):
+def generate_and_format(schema: dict) -> tuple:
     """Generate and return formatted data
 
-    :param schema:
-    :return:
+    :param dict schema:
+    :return: A http response
+    :rtype: tuple
     """
 
     if not isinstance(schema, dict):
@@ -121,18 +126,17 @@ def generate_and_format(schema):
 @app.before_request
 def seed():
     """Seed Faker random generator
-
-    :return:
     """
 
     fake.seed(request.args.get('seed'))
 
 
 @app.route("/")
-def index():
+def index() -> tuple:
     """Test route to make sure everything is running
 
-    :return:
+    :return: A http response
+    :rtype: tuple
     """
 
     return render_template('index.html')
@@ -140,11 +144,12 @@ def index():
 
 @swag_from('swagger/generate.yml')
 @app.route("/api/schema/<schema_id>/generate")
-def generate(schema_id: str):
+def generate(schema_id: str) -> tuple:
     """Generates sample data from a schema
 
     :param str schema_id: Schema id
-    :return:
+    :return: A http response
+    :rtype: tuple
     """
 
     search = [{'schema': schema_id}]
@@ -162,8 +167,11 @@ def generate(schema_id: str):
 
 @swag_from('swagger/custom_schema.yml')
 @app.route("/api/schema/generate", methods=['POST'])
-def custom_schema():
+def custom_schema() -> tuple:
     """Generates sample data for the provided schema
+
+    :return: A http response
+    :rtype: tuple
     """
 
     return generate_and_format(request.get_json())
@@ -174,7 +182,8 @@ def custom_schema():
 def get_types() -> tuple:
     """Returns all available generator types
 
-    :return:
+    :return: A http response
+    :rtype: tuple
     """
 
     return json.dumps(get_provider_types()), 200, {'Content-Type': 'application/json'}

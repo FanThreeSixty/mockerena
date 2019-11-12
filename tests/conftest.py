@@ -6,6 +6,7 @@
 
 from copy import deepcopy
 from flask import url_for
+from eve import Eve
 import pytest
 from mockerena.app import app as server
 
@@ -35,20 +36,22 @@ MOCK_SCHEMA = {
 
 
 @pytest.fixture(scope="session")
-def app():
+def app() -> Eve:
     """Returns mockerena app instance as a test fixture
 
-    :return:
+    :return: An Eve application
+    :rtype: Eve
     """
 
     return server
 
 
 @pytest.fixture()
-def sample_schema():
+def sample_schema() -> dict:
     """Returns sample schema for mockerena
 
-    :return:
+    :return: An example schema
+    :rtype: dict
     """
 
     return deepcopy(MOCK_SCHEMA)
@@ -59,7 +62,6 @@ def setup_data(client):
     """Setup example schema for testing
 
     :param Flask client: Mockerena app instance
-    :return:
     """
 
     data = deepcopy(MOCK_SCHEMA)

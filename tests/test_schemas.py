@@ -7,15 +7,16 @@
 
 from datetime import datetime
 import pytest
+from eve import Eve
 from flask import url_for
 
 
 @pytest.mark.schema
-def test_get_all_schemas(client):
+def test_get_all_schemas(client: Eve):
     """Tests that results are returned for get_all_schemas
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     res = client.get(url_for('schema|resource'))
@@ -25,11 +26,11 @@ def test_get_all_schemas(client):
 
 
 @pytest.mark.schema
-def test_generate_by_schema_id(client):
+def test_generate_by_schema_id(client: Eve):
     """Test to ensure a user can generate data for a schema by id
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     res = client.get(url_for('schema|item_lookup', _id='mock_example'))
@@ -43,11 +44,11 @@ def test_generate_by_schema_id(client):
 
 
 @pytest.mark.schema
-def test_missing_generate_schema(client):
+def test_missing_generate_schema(client: Eve):
     """Test to ensure a missing schema returns a 500
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     message = "The requested URL was not found on the server.  If you entered the URL manually please " \
@@ -61,11 +62,11 @@ def test_missing_generate_schema(client):
 
 
 @pytest.mark.schema
-def test_missing_schema(client):
+def test_missing_schema(client: Eve):
     """Test to ensure a missing schema returns a 500
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     message = "The requested URL was not found on the server. If you entered the URL manually please " \
@@ -80,11 +81,11 @@ def test_missing_schema(client):
 
 @pytest.mark.malformed
 @pytest.mark.schema
-def test_malformed_schema(client):
+def test_malformed_schema(client: Eve):
     """Test to ensure the proper error returns for malformed input
 
-    :param Flask client: Mockerena app instance
-    :return:
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
     """
 
     data = [
@@ -102,12 +103,12 @@ def test_malformed_schema(client):
 
 @pytest.mark.delimiter
 @pytest.mark.schema
-def test_function_delimiter(client, sample_schema):
+def test_function_delimiter(client: Eve, sample_schema: dict):
     """Test to ensure delimiter is working
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["delimiter"] = "|"
@@ -120,12 +121,12 @@ def test_function_delimiter(client, sample_schema):
 
 @pytest.mark.template
 @pytest.mark.schema
-def test_function_template(client, sample_schema):
+def test_function_template(client: Eve, sample_schema: dict):
     """Test to ensure template is working
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -140,12 +141,12 @@ def test_function_template(client, sample_schema):
 
 @pytest.mark.template
 @pytest.mark.schema
-def test_missing_template(client, sample_schema):
+def test_missing_template(client: Eve, sample_schema: dict):
     """Test to ensure template is working
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -162,12 +163,12 @@ def test_missing_template(client, sample_schema):
 
 @pytest.mark.nested
 @pytest.mark.schema
-def test_nested_json(client, sample_schema):
+def test_nested_json(client: Eve, sample_schema: dict):
     """Test to ensure template is working
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -183,12 +184,12 @@ def test_nested_json(client, sample_schema):
 
 @pytest.mark.truncate
 @pytest.mark.schema
-def test_truncate_column(client, sample_schema):
+def test_truncate_column(client: Eve, sample_schema: dict):
     """Test to ensure truncate is working
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -203,12 +204,12 @@ def test_truncate_column(client, sample_schema):
 
 @pytest.mark.sql
 @pytest.mark.schema
-def test_sql_schema(client, sample_schema):
+def test_sql_schema(client: Eve, sample_schema: dict):
     """Test to ensure SQL templating is working
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["num_rows"] = 1
@@ -224,12 +225,12 @@ def test_sql_schema(client, sample_schema):
 
 @pytest.mark.generate
 @pytest.mark.schema
-def test_generate_custom_schema(client, sample_schema):
+def test_generate_custom_schema(client: Eve, sample_schema: dict):
     """Test to ensure data can be generated for custom schemas
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
@@ -240,12 +241,12 @@ def test_generate_custom_schema(client, sample_schema):
 
 @pytest.mark.generate
 @pytest.mark.schema
-def test_generate_date_format(client, sample_schema):
+def test_generate_date_format(client: Eve, sample_schema: dict):
     """Test to ensure dates can be formatted
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
@@ -261,12 +262,12 @@ def test_generate_date_format(client, sample_schema):
 
 @pytest.mark.generate
 @pytest.mark.schema
-def test_generate_without_type(client, sample_schema):
+def test_generate_without_type(client: Eve, sample_schema: dict):
     """Test to ensure columns without type default to empty
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"

@@ -5,6 +5,7 @@
 """
 
 import pytest
+from eve import Eve
 from flask import url_for
 
 
@@ -14,13 +15,13 @@ from flask import url_for
     50,
     23983745987345
 ])
-def test_seed(client, seed, sample_schema):
+def test_seed(client: Eve, seed: int, sample_schema: dict):
     """Tests seed query parameter working correctly
 
-    :param Flask client: Mockerena app instance
-    :param seed: seed to test
+    :param Eve client: Mockerena app instance
+    :param int seed: Seed to test
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     iterations = 1000
@@ -34,12 +35,12 @@ def test_seed(client, seed, sample_schema):
 
 
 @pytest.mark.seed
-def test_no_seed(client, sample_schema):
+def test_no_seed(client: Eve, sample_schema: dict):
     """Tests not setting seed param generates unique data
 
-    :param Flask client: Mockerena app instance
+    :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
-    :return:
+    :raises: AssertionError
     """
 
     iterations = 1000
