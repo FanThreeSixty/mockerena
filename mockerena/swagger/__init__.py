@@ -230,6 +230,44 @@ TEMPLATE = {
                     "schema"
                 ]
             }
+        },
+        "/environment": {
+            "get": {
+                "summary": "Retrieves environment information for service",
+                "responses": {
+                    "200": {
+                        "description": "environment information",
+                        "schema": {
+                            "$ref": "#/definitions/environment"
+                        }
+                    }
+                },
+                "tags": [
+                    "environment"
+                ]
+            }
+        },
+        "/healthcheck": {
+            "get": {
+                "summary": "Retrieves health information for service",
+                "responses": {
+                    "200": {
+                        "description": "services are up",
+                        "schema": {
+                            "$ref": "#/definitions/healthcheck"
+                        }
+                    },
+                    "500": {
+                        "description": "services are down",
+                        "schema": {
+                            "$ref": "#/definitions/healthcheck"
+                        }
+                    }
+                },
+                "tags": [
+                    "health"
+                ]
+            }
         }
     },
     "definitions": {
@@ -355,6 +393,173 @@ TEMPLATE = {
                 "file_name"
             ]
         },
+        "environment": {
+            "type": "object",
+            "properties": {
+                "os": {
+                    "type": "object",
+                    "properties": {
+                        "platform": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "uname": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "platform",
+                        "name",
+                        "uname"
+                    ]
+                },
+                "application": {
+                    "type": "object",
+                    "properties": {
+                        "version": {
+                            "type": "string"
+                        },
+                        "maintainer": {
+                            "type": "string"
+                        },
+                        "maintainer_email": {
+                            "type": "string"
+                        },
+                        "git_repo": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "version",
+                        "maintainer",
+                        "maintainer_email",
+                        "git_repo"
+                    ]
+                },
+                "settings": {
+                    "type": "object",
+                    "properties": {
+                        "DEFAULT_FILE_FORMAT": {
+                            "type": "string"
+                        },
+                        "DEFAULT_INCLUDE_HEAD": {
+                            "type": "string"
+                        },
+                        "DEFAULT_SIZE": {
+                            "type": "integer"
+                        },
+                        "DEFAULT_QUOTE_CHARACTER": {
+                            "type": "string"
+                        },
+                        "DEFAULT_EXCLUDE_NULL": {
+                            "type": "boolean"
+                        },
+                        "DEFAULT_DELIMITER": {
+                            "type": "string"
+                        },
+                        "DEFAULT_KEY_SEPARATOR": {
+                            "type": "string"
+                        },
+                        "DEFAULT_IS_NESTED": {
+                            "type": "boolean"
+                        },
+                        "DEFAULT_RESPONSES": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "status_code": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "status_code"
+                                ]
+                            }
+                        }
+                    },
+                    "required": [
+                        "DEFAULT_FILE_FORMAT",
+                        "DEFAULT_INCLUDE_HEAD",
+                        "DEFAULT_SIZE",
+                        "DEFAULT_QUOTE_CHARACTER",
+                        "DEFAULT_EXCLUDE_NULL",
+                        "DEFAULT_DELIMITER",
+                        "DEFAULT_KEY_SEPARATOR",
+                        "DEFAULT_IS_NESTED",
+                        "DEFAULT_RESPONSES"
+                    ]
+                }
+            },
+            "required": [
+                "os",
+                "application",
+                "settings"
+            ]
+        },
+        "healthcheck": {
+            "type": "object",
+            "properties": {
+                "hostname": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "number"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "checker": {
+                                "type": "string"
+                            },
+                            "output": {
+                                "type": "string"
+                            },
+                            "passed": {
+                                "type": "boolean"
+                            },
+                            "timestamp": {
+                                "type": "number"
+                            },
+                            "expires": {
+                                "type": "number"
+                            },
+                            "response_time": {
+                                "type": "number"
+                            }
+                        },
+                        "required": [
+                            "checker",
+                            "output",
+                            "passed",
+                            "timestamp",
+                            "expires",
+                            "response_time"
+                        ]
+                    }
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "hostname",
+                "status",
+                "timestamp",
+                "results",
+                "version"
+            ]
+        },
         "notFound": {
             "type": "object",
             "properties": {
@@ -468,6 +673,12 @@ TEMPLATE = {
         },
         {
             "name": "generate"
+        },
+        {
+            "name": "health"
+        },
+        {
+            "name": "environment"
         }
     ]
 }
