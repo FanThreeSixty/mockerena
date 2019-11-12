@@ -40,28 +40,30 @@ setup(
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     install_requires=[
-        "Eve>=0.8.0",
+        "Eve>=0.9.0",
         "exrex>=0.10.5",
-        "Faker>=1.0.0",
+        "Faker>=2.0.0",
         "flasgger>=0.9.0",
-        "Flask>=1.0.0",
+        "Flask>=1.1.0",
         "Jinja2>=2.10",
-        "pandas>=0.24.0",
+        "jsonschema>=2.6.0,<3.0.0",
+        "pandas>=0.25.0",
         "py-healthcheck>=1.9.0"
     ],
     python_requires=">=3.6",
-    setup_requires=["pytest-runner"],
+    setup_requires=["pytest-runner>=5.2"],
     tests_require=[
-        "pytest>=4.4.0",
-        "pytest-cov>=2.6.0",
-        "pytest-flask>=0.14.0",
+        "pytest>=5.2.0",
+        "pytest-cov>=2.8.0",
+        "pytest-flask>=0.15.0",
         "pytest-pep8>=1.0.0",
         "pytest-pylint>=0.14.0"
     ],
     extras_require={
         "release": [
             "bumpversion>=0.5.0",
-            "Sphinx>=2.0.0",
+            "gunicorn>=19.9.0",
+            "Sphinx>=2.2.0",
             "sphinx-rtd-theme>=0.4.0"
         ]
     },
