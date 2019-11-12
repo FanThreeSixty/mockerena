@@ -119,8 +119,7 @@ def generate_and_format(schema: dict) -> tuple:
 
         return json.dumps(error), 422, {'Content-Type': 'application/json'}
 
-    mock_data = generate_data(schema)
-    return format_output(mock_data, schema)
+    return format_output(generate_data(schema), schema)
 
 
 @app.before_request

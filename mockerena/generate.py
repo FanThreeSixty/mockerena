@@ -27,13 +27,12 @@ def age(date: Union[datetime.datetime, datetime.date]) -> int:
     :raises: TypeError
     """
 
+    if not isinstance(date, (datetime.date, datetime.datetime)):
+        raise TypeError("Error: 'date' must be of type `datetime.datetime` or `datetime.date`")
+
     now = datetime.date.today()
-
-    if isinstance(date, (datetime.date, datetime.datetime)):
-        return now.year - date.year - 1 \
-            if now.month < date.month or (now.month == date.month and now.day < date.day) else now.year - date.year
-
-    return date
+    return now.year - date.year - 1 if now.month < date.month or (now.month == date.month and now.day < date.day) \
+        else now.year - date.year
 
 
 APPROVED_GLOBALS = {
@@ -89,7 +88,7 @@ def is_safe(expression: str) -> bool:
     :rtype: bool
     """
 
-    return bool(re.match(PATTERN, expression))
+    return bool(re.match(PATTERN, str(expression)))
 
 
 def data_for_column(column: dict, kwargs: dict, size: int) -> list:
