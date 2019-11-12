@@ -54,7 +54,7 @@ def un_flatten(data: dict, separator: str = '.') -> dict:
         _ = _un_flatten(acc.setdefault(key, {}), (terms[0], item[1])) if terms else acc.update({key: item[1]})
         return acc
 
-    return reduce(_un_flatten, data.items(), {})
+    return reduce(_un_flatten, data.items(), {}) if isinstance(data, dict) else data
 
 
 def format_output(mock: dict, schema: dict) -> tuple:  # pylint: disable=R0914
