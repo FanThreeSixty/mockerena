@@ -57,11 +57,12 @@ def un_flatten(data: dict, separator: str = '.') -> dict:
     return reduce(_un_flatten, data.items(), {}) if isinstance(data, dict) else data
 
 
-def format_output(mock: dict, schema: dict) -> tuple:  # pylint: disable=R0914
+def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple:  # pylint: disable=R0914
     """Formats output as defined in schema
 
     :param dict mock: Mock data
     :param dict schema: Provider integration data schema
+    :param int size: Number of rows
     :return: A http response
     :rtype: tuple
     """
@@ -69,7 +70,6 @@ def format_output(mock: dict, schema: dict) -> tuple:  # pylint: disable=R0914
     file_format = request.args.get('file_format', schema.get('file_format', DEFAULT_FILE_FORMAT))
     include_header = to_boolean(request.args.get('include_header', schema.get('include_header', DEFAULT_INCLUDE_HEAD)))
     exclude_null = to_boolean(request.args.get('exclude_null', schema.get('exclude_null', DEFAULT_EXCLUDE_NULL)))
-    size = int(request.args.get('numrows', schema.get('num_rows', DEFAULT_SIZE)))
     delimiter = schema.get('delimiter', DEFAULT_DELIMITER)
     quote_character = schema.get('quote_character', DEFAULT_QUOTE_CHARACTER)
     key_separator = schema.get('key_separator', DEFAULT_KEY_SEPARATOR)
