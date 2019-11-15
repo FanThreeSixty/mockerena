@@ -7,6 +7,7 @@
 from eve import Eve
 from flask import url_for
 import pytest
+from mockerena.settings import DEFAULT_SIZE
 
 
 @pytest.mark.params
@@ -18,10 +19,40 @@ def test_num_rows(client: Eve):
     :raises: AssertionError
     """
 
-    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': 100})
+    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': 50})
     assert res.status_code == 200
     assert res.mimetype == 'text/csv'
-    assert res.get_data().decode('utf-8').count('\n') == 101  # Includes header (+1)
+    assert res.get_data().decode('utf-8').count('\n') == 51  # Includes header (+1)
+
+
+@pytest.mark.params
+@pytest.mark.num_rows
+def test_negative_num_rows(client: Eve):
+    """Test to ensure negative num_rows defaults to DEFAULT_SIZE
+
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
+    """
+
+    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': -10})
+    assert res.status_code == 200
+    assert res.mimetype == 'text/csv'
+    assert res.get_data().decode('utf-8').count('\n') == DEFAULT_SIZE + 1  # Includes header (+1)
+
+
+@pytest.mark.params
+@pytest.mark.num_rows
+def test_invalid_num_rows(client: Eve):
+    """Test to ensure invalid num_rows defaults to DEFAULT_SIZE
+
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
+    """
+
+    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': 'a'})
+    assert res.status_code == 200
+    assert res.mimetype == 'text/csv'
+    assert res.get_data().decode('utf-8').count('\n') == DEFAULT_SIZE + 1  # Includes header (+1)
 
 
 @pytest.mark.params

@@ -121,15 +121,15 @@ def data_for_column(column: dict, kwargs: dict, size: int) -> list:
     return data
 
 
-def generate_data(schema: dict) -> dict:
+def generate_data(schema: dict, size: int = DEFAULT_SIZE) -> dict:
     """Generates sample data from a schema
 
     :param dict schema: Provider integration data schema
+    :param int size: Number of rows
     :return: Mapping of generated data
     :rtype: dict
     """
 
-    size = int(request.args.get('numrows', schema.get('num_rows', DEFAULT_SIZE)))
     mock = {column['name']: data_for_column(column, column.get('args', {}), size) for column in schema['columns']}
     functions = {col['name']: col['function'] for col in filter(lambda col: 'function' in col, schema['columns'])
                  if is_safe(col['function'])}
