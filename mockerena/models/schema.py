@@ -31,7 +31,7 @@ SCHEMA = {
             "required": True
         },
         "include_header": {"type": "boolean"},
-        "include_null": {"type": "boolean"},
+        "exclude_null": {"type": "boolean"},
         "is_nested": {"type": "boolean"},
         "delimiter": {"type": "string"},
         "quote_character": {"type": "string"},
