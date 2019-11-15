@@ -130,6 +130,23 @@ def test_function_age_rounding(client: Eve, sample_schema: dict):
 
 
 @pytest.mark.function
+@pytest.mark.xfail(raises=TypeError)
+def test_function_age_invalid(client: Eve, sample_schema: dict):
+    """Test to ensure non-dates raise TypeError
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: TypeError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["function"] = "age(this)"
+
+    client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+
+
+@pytest.mark.function
 def test_function_bool(client: Eve, sample_schema: dict):
     """Test to ensure bool function works
 
@@ -571,3 +588,20 @@ def test_function_request_param(client: Eve, sample_schema: dict):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == "this is happening?"
+
+
+@pytest.mark.function
+@pytest.mark.xfail(raises=TypeError)
+def test_function_additional_args(client: Eve, sample_schema: dict):
+    """Test to ensure additional
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["this"], "foo": "bar"}
+
+    client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
