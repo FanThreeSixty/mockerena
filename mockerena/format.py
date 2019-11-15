@@ -29,7 +29,7 @@ def to_boolean(var: Any) -> bool:
     :rtype: bool
     """
 
-    return var.lower() in ("true", "yes", "y", "1") if isinstance(var, str) else bool(var)
+    return var.lower() in ("true", "t", "yes", "y", "1") if isinstance(var, str) else bool(var)
 
 
 def un_flatten(data: dict, separator: str = '.') -> dict:
