@@ -163,8 +163,33 @@ def test_missing_template(client: Eve, sample_schema: dict):
 
 @pytest.mark.nested
 @pytest.mark.schema
-def test_nested_json(client: Eve, sample_schema: dict):
-    """Test to ensure template is working
+@pytest.mark.parametrize('is_nested', (True, False))
+def test_nested_json(client: Eve, sample_schema: dict, is_nested: bool):
+    """Test to ensure is_nested is working
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :param bool is_nested: JSON is nested
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["name"] = "foo.bar"
+    sample_schema["columns"][1]["name"] = "foo.baz"
+    sample_schema["is_nested"] = is_nested
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json == [{'foo': {'bar': 'this', 'baz': 'that'}}] if is_nested \
+        else res.json == [{'foo.bar': "this", "foo.baz": "that"}]
+
+
+@pytest.mark.nested
+@pytest.mark.schema
+def test_nested_json_default(client: Eve, sample_schema: dict):
+    """Test to ensure is_nested defaults to True
 
     :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
@@ -184,22 +209,24 @@ def test_nested_json(client: Eve, sample_schema: dict):
 
 @pytest.mark.truncate
 @pytest.mark.schema
-def test_truncate_column(client: Eve, sample_schema: dict):
+@pytest.mark.parametrize('truncate', (True, False))
+def test_truncate_column(client: Eve, sample_schema: dict, truncate: bool):
     """Test to ensure truncate is working
 
     :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
+    :param bool truncate: Truncate column
     :raises: AssertionError
     """
 
     sample_schema["file_format"] = "json"
-    sample_schema["columns"][1]["truncate"] = True
+    sample_schema["columns"][1]["truncate"] = truncate
 
     res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert len(res.json) == sample_schema["num_rows"]
-    assert 'bar' not in res.json[0]
+    assert 'bar' not in res.json[0] if truncate else 'bar' in res.json[0]
 
 
 @pytest.mark.sql
@@ -258,6 +285,25 @@ def test_generate_date_format(client: Eve, sample_schema: dict):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert datetime.strptime(res.json[0]["foo"], "%Y-%m-%d")
+
+
+@pytest.mark.generate
+@pytest.mark.schema
+@pytest.mark.xfail(raises=ValueError)
+def test_invalid_date_format(client: Eve, sample_schema: dict):
+    """Test to ensure invalid dates raise ValueError
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["type"] = "past_date"
+    sample_schema["columns"][0]["args"] = {}
+    sample_schema["columns"][0]["format"] = "foo bar"
+
+    client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
 
 
 @pytest.mark.generate

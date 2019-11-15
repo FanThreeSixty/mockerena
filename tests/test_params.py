@@ -57,19 +57,52 @@ def test_invalid_num_rows(client: Eve):
 
 @pytest.mark.params
 @pytest.mark.include_header
-def test_include_header(client: Eve):
+@pytest.mark.parametrize('value,count', (
+        (True, 11),
+        ('true', 11),
+        ('t', 11),
+        ('yes', 11),
+        ('y', 11),
+        ('1', 11),
+        (False, 10),
+        ('false', 10),
+        ('f', 10),
+        ('no', 10),
+        ('n', 10),
+        ('0', 10)
+))
+def test_include_header(client: Eve, value: str, count: int):
     """Test to ensure include header can be overridden
+
+    :param Eve client: Mockerena app instance
+    :param str value: Include header value
+    :param int count: Row count
+    :raises: AssertionError
+    """
+
+    url = url_for('generate', schema_id='mock_example')
+    res = client.get(url, query_string={'include_header': value})
+
+    assert res.status_code == 200
+    assert res.mimetype == 'text/csv'
+    assert res.get_data().decode('utf-8').count('\n') == count
+
+
+@pytest.mark.params
+@pytest.mark.include_header
+def test_invalid_include_header(client: Eve):
+    """Test to ensure include_header defaults to false
 
     :param Eve client: Mockerena app instance
     :raises: AssertionError
     """
 
     url = url_for('generate', schema_id='mock_example')
-    res = client.get(url, query_string={'include_header': 'false'})
+    res = client.get(url, query_string={'include_header': 'foo'})  # Omits header
 
     assert res.status_code == 200
     assert res.mimetype == 'text/csv'
-    assert res.get_data().decode('utf-8').count('\n') == 10  # Omits header
+    assert res.get_data().decode('utf-8').count('\n') == 10
 
 
 @pytest.mark.params
@@ -87,6 +120,21 @@ def test_file_format(client: Eve):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json
+
+
+@pytest.mark.params
+@pytest.mark.file_format
+def test_invalid_file_format(client: Eve):
+    """Test to ensure invalid file format return an error response
+
+    :param Eve client: Mockerena app instance
+    :raises: AssertionError
+    """
+
+    url = url_for('generate', schema_id='mock_example')
+    res = client.get(url, query_string={'file_format': 'foo'})
+
+    assert res.status_code == 422
 
 
 @pytest.mark.params
