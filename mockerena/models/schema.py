@@ -59,21 +59,26 @@ SCHEMA = {
             }
         },
         "responses": {
-            "type": "dict",
-            "schema": {
-                "status_code": {
-                    "type": "integer",
-                    "min": 100,
-                    "max": 599
-                },
-                "headers": {"type": "dict", "allow_unknown": True},
-                "content_type": {"type": "string"},
-                "data": {"type": "string"},
-                "weight": {
-                    "type": "integer",
-                    "min": 1
+            "type": "list",
+            "items": [
+                {
+                    "type": "dict",
+                    "schema": {
+                        "status_code": {
+                            "type": "integer",
+                            "min": 100,
+                            "max": 599
+                        },
+                        "headers": {"type": "dict", "allow_unknown": True},
+                        "content_type": {"type": "string"},
+                        "data": {"type": "string"},
+                        "weight": {
+                            "type": "integer",
+                            "min": 1
+                        }
+                    }
                 }
-            }
+            ]
         }
     },
     "additional_lookup": {

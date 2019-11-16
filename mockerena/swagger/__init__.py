@@ -383,6 +383,34 @@ TEMPLATE = {
                         }
                     }
                 },
+                "responses": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "status_code": {
+                                "type": "integer",
+                                "minimum": 100,
+                                "maximum": 599,
+                            },
+                            "headers": {
+                                "type": "object",
+                                "additionalProperties": {},
+                                "nullable": True
+                            },
+                            "content_type": {
+                                "type": "string"
+                            },
+                            "data": {
+                                "type": "string"
+                            },
+                            "weight": {
+                                "type": "integer",
+                                "minimum": 1
+                            }
+                        }
+                    }
+                },
                 "_id": {
                     "type": "string",
                     "format": "objectid"
