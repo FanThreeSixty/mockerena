@@ -119,6 +119,24 @@ def test_function_delimiter(client: Eve, sample_schema: dict):
     assert str(res.get_data()).count('|') == sample_schema["num_rows"] + 1
 
 
+@pytest.mark.delimiter
+@pytest.mark.schema
+def test_function_invalid_delimiter(client: Eve, sample_schema: dict):
+    """Test to ensure invalid delimiters are defaulted to comma or tab
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["delimiter"] = "   "
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'text/csv'
+    assert str(res.get_data()).count(',') == sample_schema["num_rows"] + 1
+
+
 @pytest.mark.template
 @pytest.mark.schema
 def test_function_template(client: Eve, sample_schema: dict):

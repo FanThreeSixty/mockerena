@@ -92,7 +92,7 @@ def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple: 
         content_type = response.get('content_type', 'text/plain')
 
     elif file_format in ('csv', 'tsv'):
-        _delimiter = delimiter or ('\t' if file_format == 'tsv' else ',')
+        _delimiter = delimiter if delimiter and len(delimiter) == 1 else ('\t' if file_format == 'tsv' else ',')
         content = _format_pandas(mock, _delimiter, include_header, quote_character)
         content_type = response.get('content_type', 'text/csv')
 
