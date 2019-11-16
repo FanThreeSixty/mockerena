@@ -121,7 +121,7 @@ def test_function_age_rounding(client: Eve, sample_schema: dict):
     sample_schema["file_format"] = "json"
     sample_schema["columns"][0]["type"] = "date_between"
     sample_schema["columns"][0]["args"] = {"start_date": "-364d", "end_date": "-363d"}
-    sample_schema["columns"][0]["function"] = "age(this)"
+    sample_schema["columns"][0]["function"] = "age(parse_date(this, '%Y-%m-%d'))"
 
     res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
     assert res.status_code == 200
@@ -384,6 +384,27 @@ def test_function_month(client: Eve, sample_schema: dict):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == datetime.now().month
+
+
+@pytest.mark.function
+def test_function_parse_date(client: Eve, sample_schema: dict):
+    """Test to ensure parse_date function works
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["type"] = "date"
+    del sample_schema["columns"][0]["args"]
+    sample_schema["columns"][0]["function"] = "isinstance(parse_date(this, '%Y-%m-%d'), datetime)"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]['foo']
 
 
 @pytest.mark.function
