@@ -324,3 +324,22 @@ def test_generate_without_type(client: Eve, sample_schema: dict):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]["foo"] == ""
+
+
+@pytest.mark.generate
+@pytest.mark.schema
+def test_generate_invalid_type(client: Eve, sample_schema: dict):
+    """Test to ensure columns with invalid types default to empty
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0] = {"name": "foo", "type": "foobar"}
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]["foo"] == ""

@@ -103,7 +103,7 @@ def data_for_column(column: dict, kwargs: dict, size: int) -> list:
 
     data = []
     data_type = column.get('type', 'empty')
-    method = getattr(fake, data_type)
+    method = getattr(fake, data_type, getattr(fake, 'empty'))
     percent_empty = column.get('percent_empty', 0)
 
     for _ in range(size):
