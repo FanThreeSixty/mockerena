@@ -41,6 +41,8 @@ APPROVED_GLOBALS = {
     'bool': bool,
     'concat': lambda *args: "".join(args),
     'day': lambda d: d.day if isinstance(d, (datetime.datetime, datetime.date)) else d,
+    'date': datetime.date,
+    'datetime': datetime.datetime,
     'epoch': lambda d: d.timestamp() if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'fake': fake,
     'float': float,
@@ -53,6 +55,7 @@ APPROVED_GLOBALS = {
     'lower': lambda s: str(s).lower(),
     'month': lambda d: d.month if isinstance(d, (datetime.datetime, datetime.date)) else d,
     'now': datetime.datetime.now,
+    'parse_date': datetime.datetime.strptime,
     'pow': pow,
     'request_param': lambda param: request.args.get(param, None),
     'range': range,
@@ -113,9 +116,10 @@ def data_for_column(column: dict, kwargs: dict, size: int) -> list:
 
         else:
             datum = method(**kwargs)
-            if 'format' in column:
-                datum = datum.strftime(column['format']) if isinstance(datum, (datetime.date, datetime.datetime)) \
-                    else datum
+
+            if isinstance(datum, (datetime.date, datetime.datetime)):
+                datum = datum.strftime(column['format']) if 'format' in column else datum.isoformat()
+
             data.append(datum)
 
     return data
