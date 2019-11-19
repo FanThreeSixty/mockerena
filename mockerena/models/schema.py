@@ -21,7 +21,7 @@ SCHEMA = {
         },
         "file_format": {
             "type": "string",
-            "allowed": ["csv", "tsv", "xml", "html", "json"]
+            "required": True
         },
         "file_name": {
             "type": "string",

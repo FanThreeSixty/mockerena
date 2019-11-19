@@ -614,7 +614,7 @@ TEMPLATE = {
                     }
                 }
             }
-            }
+        }
     },
     "parameters": {
         "schema_id": {
@@ -639,7 +639,7 @@ TEMPLATE = {
             "type": "string",
             "required": False,
             "default": DEFAULT_FILE_FORMAT,
-            "enum": ["csv", "tsv", "json", "xml", "html"]
+            "enum": ["csv", "tsv", "json", "xml", "html", "sql"]
         },
         "numrows": {
             "in": "query",
