@@ -7,13 +7,13 @@
 
 import datetime
 from functools import reduce
-import json
 import random
 from typing import Any
 
 from flask import make_response, request
 from jinja2 import Template
 import pandas as pd
+import simplejson
 
 from mockerena.errors import ERROR_422
 from mockerena.generate import fake
@@ -132,7 +132,7 @@ def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple: 
             "_error": ERROR_422
         }
 
-        return json.dumps(error), 422, {'Content-Type': 'application/json'}
+        return simplejson.dumps(error), 422, {'Content-Type': 'application/json'}
 
     now = datetime.datetime.now().strftime("%Y%m%d%H%M")
     filename = schema.get('file_name').format(now)
@@ -175,7 +175,7 @@ def _format_json(mock: dict, sep: str, exclude_null: bool = False, is_nested: bo
 
     data_frame = pd.DataFrame(mock)
     records = [row.dropna().to_dict() if exclude_null else row.to_dict() for _, row in data_frame.iterrows()]
-    return json.dumps([un_flatten(record, sep) if is_nested else record for record in records])
+    return simplejson.dumps([un_flatten(record, sep) if is_nested else record for record in records], ignore_nan=True)
 
 
 def _format_template(mock: dict, schema: dict, **kwargs) -> str:
