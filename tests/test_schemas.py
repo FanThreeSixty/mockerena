@@ -225,6 +225,27 @@ def test_nested_json_default(client: Eve, sample_schema: dict):
     assert res.json == [{'foo': {'bar': 'this', 'baz': 'that'}}]
 
 
+@pytest.mark.nested
+@pytest.mark.schema
+def test_nested_json_duplicate(client: Eve, sample_schema: dict):
+    """Test to ensure with nested json, duplicate name replaces prior
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["name"] = "foo.bar"
+    sample_schema["columns"][1]["name"] = "foo.bar"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json == [{'foo': {'bar': 'that'}}]
+
+
 @pytest.mark.truncate
 @pytest.mark.schema
 @pytest.mark.parametrize('truncate', (True, False))
@@ -322,6 +343,25 @@ def test_invalid_date_format(client: Eve, sample_schema: dict):
     sample_schema["columns"][0]["format"] = "foo bar"
 
     client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+
+
+@pytest.mark.generate
+@pytest.mark.schema
+@pytest.mark.parametrize('percent_empty', (-1.0, 3.0, 'foo'))
+def test_invalid_percent_empty(client: Eve, sample_schema: dict, percent_empty: float):
+    """Test to ensure invalid percent_empty values returns an error response
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :param float percent_empty: Percent empty value
+    :raises: AssertionError
+    """
+
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["percent_empty"] = percent_empty
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 422
 
 
 @pytest.mark.generate
