@@ -4,6 +4,9 @@
 
 """
 
+from copy import deepcopy
+
+
 SCHEMA = {
     "item_title": "schema",
     "schema": {
@@ -90,3 +93,8 @@ SCHEMA = {
         "field": "schema"
     },
 }
+
+# Build a schema for custom_schema route
+CUSTOM_SCHEMA = deepcopy(SCHEMA["schema"])
+del CUSTOM_SCHEMA["schema"]["unique"]
+del CUSTOM_SCHEMA["file_name"]["unique"]

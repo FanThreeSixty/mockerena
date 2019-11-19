@@ -13,6 +13,7 @@ import logging
 import os
 
 from bson.objectid import ObjectId
+from cerberus import Validator
 from eve import Eve
 from faker.providers import BaseProvider
 from flasgger import Swagger, swag_from
@@ -24,6 +25,7 @@ from mockerena import __author__, __email__, __version__
 from mockerena.errors import ERROR_404, ERROR_422
 from mockerena.format import format_output
 from mockerena.generate import fake, generate_data
+from mockerena.models.schema import CUSTOM_SCHEMA
 from mockerena.settings import DEBUG, DEFAULT_FILE_FORMAT, DEFAULT_INCLUDE_HEAD, DEFAULT_SIZE, \
     DEFAULT_QUOTE_CHARACTER, DEFAULT_EXCLUDE_NULL, DEFAULT_DELIMITER, DEFAULT_KEY_SEPARATOR, \
     DEFAULT_IS_NESTED, DEFAULT_RESPONSES, ENV, HOST, PORT, SECRET_KEY
@@ -176,7 +178,22 @@ def custom_schema() -> tuple:
     :rtype: tuple
     """
 
-    return generate_and_format(request.get_json())
+    validator = Validator(CUSTOM_SCHEMA)
+    data = request.get_json()
+
+    if not isinstance(data, dict) or not validator.validate(data):
+
+        data_error = {"validation exception": f"'{str(data)}' is not a document, must be a dict"}
+
+        error = {
+            "_status": "ERR",
+            "_issues": data_error if not isinstance(data, dict) else validator.errors,
+            "_error": ERROR_422
+        }
+
+        return json.dumps(error), 422, {'Content-Type': 'application/json'}
+
+    return generate_and_format(data)
 
 
 @swag_from('swagger/types.yml')
