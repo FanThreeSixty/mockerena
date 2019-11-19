@@ -34,8 +34,12 @@ SCHEMA = {
         "exclude_null": {"type": "boolean"},
         "is_nested": {"type": "boolean"},
         "delimiter": {"type": "string"},
+        "key_separator": {"type": "string"},
         "quote_character": {"type": "string"},
         "template": {
+            "type": "string"
+        },
+        "table_name": {
             "type": "string"
         },
         "columns": {

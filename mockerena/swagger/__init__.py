@@ -339,6 +339,10 @@ TEMPLATE = {
                     "type": "string",
                     "description": "HTML, XML or SQL template"
                 },
+                "table_name": {
+                    "type": "string",
+                    "description": "Table name, only use if `file_format` is `sql`"
+                },
                 "columns": {
                     "type": "array",
                     "items": {
