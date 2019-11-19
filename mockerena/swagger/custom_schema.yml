@@ -5,6 +5,8 @@ parameters:
     in: body
     required: true
     description: Schema for provider and integration
+    schema:
+      $ref: "#/definitions/schema"
   - $ref: "#/parameters/seed"
   - $ref: "#/parameters/numrows"
   - $ref: "#/parameters/file_format"
