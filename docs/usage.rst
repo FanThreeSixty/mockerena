@@ -53,6 +53,10 @@ To breakdown what is happening at the schema-level above, here are what each ite
 
     **include_header** - Include the header for the CSV
 
+    **exclude_null** - Squash nulls for JSON formats
+
+    **is_nested** - Generate nested JSON
+
     **delimiter** - CSV column separator
 
     **quote_character** - Quoting character for CSV or TSV
@@ -72,6 +76,8 @@ On a column-level:
     **args** - Arguments passed into type
 
     **function** - Post-processing function (`see below <#functions>`_)
+
+    **format** - Date format (`use standard python date format strings <http://strftime.org/>`_)
 
 
 To generate data, GET to ``/api/schema/{schema_id}/generate``. You should receive something like this:
@@ -101,6 +107,69 @@ Mockerena mostly uses ``Faker`` providers to generate random data.
 With Mockerena, we've supplied a few additional providers that are available `here <https://mockerena.readthedocs.io/en/latest/source/mockerena.html#module-mockerena.providers>`_.
 
 You can also use the types endpoint ``/api/types`` to retrieve a complete list of all provider types.
+
+---------
+Templates
+---------
+
+Mockerena gives users the flexibility to define return types that aren't listed as options for file_format. Any file
+format that isn't immediately recognized, requires a template. So for example:
+
+.. code-block:: JSON
+
+    {
+        "schema": "mock_example",
+        "num_rows": 10,
+        "file_format": "xml",
+        "file_name": "mock_{}_example",
+        "template": "<root>{% for r in records %}<record><foo>{{r['foo']}}</foo><bar>{{r['bar']}}</bar></record>{% endfor %}</root>"
+        "columns": [
+            {
+                "name": "foo",
+                "truncate": false,
+                "type": "word",
+                "description": "First column",
+                "percent_empty": 0.2
+            },
+            {
+                "name": "bar",
+                "type": "random_element",
+                "description": "Second column",
+                "truncate": false,
+                "args": {
+                    "elements": ["that"]
+                },
+                "function": "this + this"
+            }
+        ]
+    }
+
+Would return and XML response like:
+
+.. code-block:: XML
+
+    <root>
+        <record>
+            <foo>lose</foo>
+            <bar>thatthat</bar>
+        </record>
+        <record>
+            <foo>now</foo>
+            <bar>thatthat</bar>
+        </record>
+        <record>
+            <foo>and</foo>
+            <bar>thatthat</bar>
+        </record>
+        <record>
+            <foo></foo>
+            <bar>thatthat</bar>
+        </record>
+        ....
+    </root>
+
+And since Mockerena uses `Jinja2 <https://jinja.palletsprojects.com/en/2.10.x/templates/>`_ as the templating engine, you can
+leverage their robust set of filters and tests to further control how data populates the template.
 
 ---------
 Responses
