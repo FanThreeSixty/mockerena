@@ -40,6 +40,7 @@ setup(
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     install_requires=[
+        "dnspython>=1.16.0",
         "Eve>=0.9.0",
         "exrex>=0.10.5",
         "Faker>=2.0.0",
@@ -48,7 +49,8 @@ setup(
         "Jinja2>=2.10",
         "jsonschema>=2.6.0,<3.0.0",
         "pandas>=0.25.0",
-        "py-healthcheck>=1.9.0"
+        "py-healthcheck>=1.9.0",
+        "simplejson>=3.16.0"
     ],
     python_requires=">=3.6",
     setup_requires=["pytest-runner>=5.2"],
