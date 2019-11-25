@@ -5,6 +5,7 @@
 """
 
 import os
+import ssl
 from mockerena.models.schema import SCHEMA
 
 
@@ -28,6 +29,12 @@ MONGO_DBNAME = os.environ.get('MOCKERENA_MONGO_DBNAME', 'mockerena')
 MONGO_AUTH_SOURCE = os.environ.get('MOCKERENA_MONGO_AUTH_SOURCE', 'mockerena')
 MONGO_USERNAME = os.environ.get('MOCKERENA_MONGO_USERNAME', '')
 MONGO_PASSWORD = os.environ.get('MOCKERENA_MONGO_PASSWORD', '')
+
+if os.environ.get('MOCKERENA_MONGO_URI', None):
+    MONGO_URI = os.environ.get('MOCKERENA_MONGO_URI')
+
+if os.environ.get('MOCKERENA_MONGO_SSL', 'false') == 'true':
+    MONGO_OPTIONS = {"ssl": True, "ssl_cert_reqs": ssl.CERT_NONE}
 
 
 # Project defaults
