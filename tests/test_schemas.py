@@ -328,9 +328,28 @@ def test_generate_date_format(client: Eve, sample_schema: dict):
 
 @pytest.mark.generate
 @pytest.mark.schema
-@pytest.mark.xfail(raises=ValueError)
-def test_invalid_date_format(client: Eve, sample_schema: dict):
-    """Test to ensure invalid dates raise ValueError
+def test_generate_datetime_format(client: Eve, sample_schema: dict):
+    """Test to ensure date times can be formatted
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["type"] = "date_time"
+    sample_schema["columns"][0]["args"] = {}
+    sample_schema["columns"][0]["format"] = "%Y-%m-%dT%H:%M:%S"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert datetime.strptime(res.json[0]['foo'], '%Y-%m-%dT%H:%M:%S')
+
+
+@pytest.mark.generate
+@pytest.mark.schema
+def test_default_date_format(client: Eve, sample_schema: dict):
+    """Test to ensure dates are formatted as ISO8601 by default
 
     :param Eve client: Mockerena app instance
     :param dict sample_schema: Sample schema data
@@ -340,9 +359,10 @@ def test_invalid_date_format(client: Eve, sample_schema: dict):
     sample_schema["file_format"] = "json"
     sample_schema["columns"][0]["type"] = "past_date"
     sample_schema["columns"][0]["args"] = {}
-    sample_schema["columns"][0]["format"] = "foo bar"
 
-    client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert datetime.strptime(res.json[0]['foo'], '%Y-%m-%d')
 
 
 @pytest.mark.generate
@@ -398,6 +418,8 @@ def test_generate_invalid_type(client: Eve, sample_schema: dict):
     sample_schema["columns"][0] = {"name": "foo", "type": "foobar"}
 
     res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
-    assert res.status_code == 200
+    assert res.status_code == 400
     assert res.mimetype == 'application/json'
-    assert res.json[0]["foo"] == ""
+    assert res.json['_status'] == "ERR"
+    assert res.json['_error']['code'] == 400
+    assert res.json['_error']['message']

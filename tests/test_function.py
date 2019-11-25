@@ -82,9 +82,8 @@ def test_function_restrict(client: Eve, sample_schema: dict):
     sample_schema["columns"][0]["function"] = "__import__('platform').system()"
 
     res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
-    assert res.status_code == 200
+    assert res.status_code == 400
     assert res.mimetype == 'application/json'
-    assert all([row['foo'] == 'this' for row in res.json])
 
 
 @pytest.mark.function
@@ -130,7 +129,6 @@ def test_function_age_rounding(client: Eve, sample_schema: dict):
 
 
 @pytest.mark.function
-@pytest.mark.xfail(raises=TypeError)
 def test_function_age_invalid(client: Eve, sample_schema: dict):
     """Test to ensure non-dates raise TypeError
 
@@ -143,7 +141,8 @@ def test_function_age_invalid(client: Eve, sample_schema: dict):
     sample_schema["file_format"] = "json"
     sample_schema["columns"][0]["function"] = "age(this)"
 
-    client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 400
 
 
 @pytest.mark.function
@@ -612,7 +611,6 @@ def test_function_request_param(client: Eve, sample_schema: dict):
 
 
 @pytest.mark.function
-@pytest.mark.xfail(raises=TypeError)
 def test_function_additional_args(client: Eve, sample_schema: dict):
     """Test to ensure additional
 
@@ -625,4 +623,22 @@ def test_function_additional_args(client: Eve, sample_schema: dict):
     sample_schema["file_format"] = "json"
     sample_schema["columns"][0]["args"] = {"elements": ["this"], "foo": "bar"}
 
-    client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 400
+
+
+@pytest.mark.function
+def test_invalid_function(client: Eve, sample_schema: dict):
+    """Test to ensure field option works in function
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][1]["function"] = "if else"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 400
+    assert res.mimetype == 'application/json'

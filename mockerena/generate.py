@@ -106,7 +106,12 @@ def data_for_column(column: dict, kwargs: dict, size: int) -> list:
 
     data = []
     data_type = column.get('type', 'empty')
-    method = getattr(fake, data_type, getattr(fake, 'empty'))
+
+    try:
+        method = getattr(fake, data_type)
+    except AttributeError:
+        raise AttributeError(f"Exception at column {column.get('name', '')}, '{data_type}' is not a valid data type")
+
     percent_empty = column.get('percent_empty', 0)
 
     for _ in range(size):
@@ -135,8 +140,11 @@ def generate_data(schema: dict, size: int = DEFAULT_SIZE) -> dict:
     """
 
     mock = {column['name']: data_for_column(column, column.get('args', {}), size) for column in schema['columns']}
-    functions = {col['name']: col['function'] for col in filter(lambda col: 'function' in col, schema['columns'])
-                 if is_safe(col['function'])}
+    functions = {col['name']: col['function'] for col in filter(lambda col: 'function' in col, schema['columns'])}
+    unsafe_functions = {column: function for column, function in functions.items() if not is_safe(function)}
+
+    if unsafe_functions:
+        raise SyntaxError(f"Column(s) {', '.join(unsafe_functions.keys())} does not contain supported functions")
 
     if functions:
 
@@ -144,8 +152,14 @@ def generate_data(schema: dict, size: int = DEFAULT_SIZE) -> dict:
 
         for row in range(0, size):
             approved_locals['field'] = {column: mock[column][row] for column in mock}
-            for column in functions:
-                approved_locals['this'] = approved_locals['field'][column]  # 'this' can be referenced in function
-                mock[column][row] = eval(functions[column], APPROVED_GLOBALS, approved_locals)  # pylint: disable=W0123
+            for col in functions:
+                approved_locals['this'] = approved_locals['field'][col]  # 'this' can be referenced in function
+
+                try:
+                    mock[col][row] = eval(functions[col], APPROVED_GLOBALS, approved_locals)  # pylint: disable=W0123
+                except SyntaxError:
+                    raise SyntaxError(f"Exception for column '{col}', function has invalid syntax")
+                except Exception as err:
+                    raise type(err)(f"Exception for column '{col}', {str(err)}")
 
     return mock

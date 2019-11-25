@@ -140,7 +140,6 @@ def test_provider_weighted_choice(client: Eve, sample_schema: dict):
 
 @pytest.mark.regex
 @pytest.mark.provider
-@pytest.mark.xfail(raises=AssertionError)
 @pytest.mark.parametrize('elements, weights', (
         (1, 2),
         (('foo', 'bar'), 3),
@@ -163,7 +162,8 @@ def test_provider_weighted_choice_invalid(client: Eve, sample_schema: dict, elem
     sample_schema["columns"][0]["type"] = "weighted_choice"
     sample_schema["columns"][0]["args"] = {"elements": elements, "weights": weights}
 
-    client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 400
 
 
 @pytest.mark.empty

@@ -49,3 +49,33 @@ def test_operators(client: Eve, sample_schema: dict, function: str, result: Any)
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['foo'] == result
+
+
+@pytest.mark.operators
+@pytest.mark.parametrize('function', (
+    "1 + None",
+    "1 - None",
+    "2 * None",
+    "6 / 'a'",
+    "6 / 0",
+    "7 // 'a'",
+    "2 ** 'a'",
+    "7 % 'b'",
+    "2 in 4",
+))
+def test_invalid_operators(client: Eve, sample_schema: dict, function: str):
+    """Test to ensure all operators are accepted
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :param str function: Column function
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["function"] = function
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 400
+    assert res.mimetype == 'application/json'
