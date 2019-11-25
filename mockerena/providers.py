@@ -60,5 +60,7 @@ class MockProvider(BaseProvider):
         :raises: AssertionError
         """
 
-        assert all([isinstance(attr, (list, tuple)) for attr in (elements, weights)]) and len(elements) == len(weights)
+        if not all([isinstance(attr, (list, tuple)) for attr in (elements, weights)]):
+            raise ValueError('`elements` and `weights` must both be lists')
+
         return random.choices(elements, weights=weights)[0]

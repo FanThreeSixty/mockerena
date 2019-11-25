@@ -17,7 +17,7 @@ from cerberus import Validator
 from eve import Eve
 from faker.providers import BaseProvider
 from flasgger import Swagger, swag_from
-from flask import request, render_template
+from flask import abort, jsonify, request, render_template
 from healthcheck import HealthCheck, EnvironmentDump
 from pymongo.errors import ServerSelectionTimeoutError
 
@@ -124,7 +124,11 @@ def generate_and_format(schema: dict) -> tuple:
     num_rows = request.args.get('numrows', schema.get('num_rows', DEFAULT_SIZE))
     size = int(num_rows if str(num_rows).isnumeric() else DEFAULT_SIZE)
 
-    return format_output(generate_data(schema, size), schema, size)
+    try:
+        return format_output(generate_data(schema, size), schema, size)
+
+    except (AttributeError, SyntaxError, TypeError, ValueError, ZeroDivisionError) as err:
+        abort(400, description=str(err))
 
 
 @app.before_request
@@ -206,6 +210,18 @@ def get_types() -> tuple:
     """
 
     return json.dumps(get_provider_types()), 200, {'Content-Type': 'application/json'}
+
+
+@app.errorhandler(400)
+def bad_request(error: Exception) -> tuple:
+    """Handle bad requests
+
+    :param Exception error: Exception thrown
+    :return: A http response
+    :rtype: tuple
+    """
+
+    return jsonify(_status="ERR", _error={"code": 400, "message": str(error)}), 400
 
 
 # Add environment and health check routes
