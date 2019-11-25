@@ -35,11 +35,11 @@
     "chalk": "^2.4.2",
     "inquirer": "^7.0.0",
     "js-yaml": "^3.13.1",
-    "serverless-python-requirements": "^5.0.0",
-    "serverless-wsgi": "^1.7.3"
+    "serverless-python-requirements": "^5.0.1",
+    "serverless-wsgi": "^1.7.4"
   },
   "dependencies": {
-    "serverless": "^1.51.0"
+    "serverless": "^1.58.0"
   },
   "engines": {
     "node": ">= 8.0.0",
