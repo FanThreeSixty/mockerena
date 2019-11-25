@@ -3,7 +3,7 @@ Generates sample data from a schema
 parameters:
   - $ref: "#/parameters/schema_id"
   - $ref: "#/parameters/seed"
-  - $ref: "#/parameters/numrows"
+  - $ref: "#/parameters/num_rows"
   - $ref: "#/parameters/file_format"
   - $ref: "#/parameters/include_header"
   - $ref: "#/parameters/exclude_null"

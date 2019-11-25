@@ -19,7 +19,7 @@ def test_num_rows(client: Eve):
     :raises: AssertionError
     """
 
-    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': 50})
+    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'num_rows': 50})
     assert res.status_code == 200
     assert res.mimetype == 'text/csv'
     assert res.get_data().decode('utf-8').count('\n') == 51  # Includes header (+1)
@@ -34,7 +34,7 @@ def test_negative_num_rows(client: Eve):
     :raises: AssertionError
     """
 
-    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': -10})
+    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'num_rows': -10})
     assert res.status_code == 200
     assert res.mimetype == 'text/csv'
     assert res.get_data().decode('utf-8').count('\n') == DEFAULT_SIZE + 1  # Includes header (+1)
@@ -49,7 +49,7 @@ def test_invalid_num_rows(client: Eve):
     :raises: AssertionError
     """
 
-    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'numrows': 'a'})
+    res = client.get(url_for('generate', schema_id='mock_example'), query_string={'num_rows': 'a'})
     assert res.status_code == 200
     assert res.mimetype == 'text/csv'
     assert res.get_data().decode('utf-8').count('\n') == DEFAULT_SIZE + 1  # Includes header (+1)
