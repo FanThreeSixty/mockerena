@@ -51,6 +51,7 @@ APPROVED_GLOBALS = {
     'int': int,
     'isinstance': isinstance,
     'join': lambda l, d: d.join(l) if isinstance(d, str) and isinstance(l, (list, tuple)) else '',
+    'list': list,
     'len': len,
     'lower': lambda s: str(s).lower(),
     'month': lambda d: d.month if isinstance(d, (datetime.datetime, datetime.date)) else d,
@@ -64,6 +65,7 @@ APPROVED_GLOBALS = {
     'str': str,
     'sum': sum,
     'time': lambda d: d.time() if isinstance(d, datetime.datetime) else d,
+    'tuple': tuple,
     'upper': lambda s: str(s).upper(),
     'year': lambda d: d.year if isinstance(d, (datetime.datetime, datetime.date)) else d
 }
