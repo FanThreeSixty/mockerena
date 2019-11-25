@@ -121,7 +121,7 @@ def generate_and_format(schema: dict) -> tuple:
 
         return json.dumps(error), 422, {'Content-Type': 'application/json'}
 
-    num_rows = request.args.get('numrows', schema.get('num_rows', DEFAULT_SIZE))
+    num_rows = request.args.get('num_rows', schema.get('num_rows', DEFAULT_SIZE))
     size = int(num_rows if str(num_rows).isnumeric() else DEFAULT_SIZE)
 
     try:

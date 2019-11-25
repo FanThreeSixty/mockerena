@@ -641,9 +641,9 @@ TEMPLATE = {
             "default": DEFAULT_FILE_FORMAT,
             "enum": ["csv", "tsv", "json", "xml", "html", "sql"]
         },
-        "numrows": {
+        "num_rows": {
             "in": "query",
-            "name": "numrows",
+            "name": "num_rows",
             "description": "The number or rows of data to generate",
             "type": "int",
             "default": DEFAULT_SIZE,
