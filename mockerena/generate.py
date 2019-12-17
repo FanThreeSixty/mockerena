@@ -76,7 +76,7 @@ APPROVED_TERMS = [
     "(?:if|else)",  # Conditionals
     "(?:True|False|None|-?\\d+|\"{2}|\'{2}|\'[\\w\\\\/,: ]+\'|\"[\\w\\\\/,: ]+\")",  # Built-ins
     f"(?:{'|'.join(APPROVED_GLOBALS)})\\.?\\([\\w\\'\\\"\\[\\]\\(\\)\\\\+\\%*,-: ]+\\)",  # Functions
-    "(?:fake|request_param)\\.[\\w]+\\([\\w\\'\\\"\\[\\]\\(\\)\\{\\}\\+*,-: ]+\\)",  # Faker
+    "(?:fake|request_param)\\.[\\w]+\\([\\w\\'\\\"\\[\\]\\(\\)\\{\\}\\+*,-: ]*\\)",  # Faker
     "(?:this|field\\[[\'\"][\\w\\. ]+[\'\"]\\])",  # Variables
     "\\[-?\\d+(?: ?\\: ?-?\\d+)?\\]",  # Slicing
     " "  # Whitespace
