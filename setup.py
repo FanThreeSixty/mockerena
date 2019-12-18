@@ -43,14 +43,15 @@ setup(
         "dnspython>=1.16.0",
         "Eve>=0.9.0",
         "exrex>=0.10.5",
-        "Faker>=2.0.0",
+        "Faker<3.0.0",
         "flasgger>=0.9.0",
         "Flask>=1.1.0",
         "Jinja2>=2.10",
         "jsonschema>=2.6.0,<3.0.0",
         "pandas>=0.25.0",
         "py-healthcheck>=1.9.0",
-        "simplejson>=3.16.0"
+        "simplejson>=3.16.0",
+        "Werkzeug==0.15.4"
     ],
     python_requires=">=3.6",
     setup_requires=["pytest-runner>=5.2"],
