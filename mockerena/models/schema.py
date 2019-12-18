@@ -39,9 +39,8 @@ SCHEMA = {
         "delimiter": {"type": "string"},
         "key_separator": {"type": "string"},
         "quote_character": {"type": "string"},
-        "template": {
-            "type": "string"
-        },
+        "template": {"type": "string"},
+        "root_node": {"type": "string"},
         "table_name": {
             "type": "string"
         },

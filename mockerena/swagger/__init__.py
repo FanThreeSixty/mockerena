@@ -339,6 +339,10 @@ TEMPLATE = {
                     "type": "string",
                     "description": "HTML, XML or SQL template"
                 },
+                "root_node": {
+                    "type": "string",
+                    "description": "XML root node"
+                },
                 "table_name": {
                     "type": "string",
                     "description": "Table name, only use if `file_format` is `sql`"

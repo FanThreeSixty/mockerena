@@ -57,6 +57,51 @@ def un_flatten(data: dict, separator: str = '.') -> dict:
     return reduce(_un_flatten, data.items(), {}) if isinstance(data, dict) else data
 
 
+def generate_xml_template(columns: dict, root_node: str = None) -> str:
+    """Convert columns to a Jinja template string
+
+    :param dict columns:
+    :param str root_node:
+    :return: Jinja template string
+    :rtype: str
+    """
+
+    if not (isinstance(columns, dict) and columns):
+        return ''
+
+    def _generate_xml_template(children: dict, root: str = None) -> str:
+        """Convert dictionary to xml
+
+        :param dict children: Mapping of child nodes
+        :param str root: Root node name
+        :return: XML string
+        :rtype: str
+        """
+
+        if not (isinstance(children, dict) and children):
+            return ''
+
+        xml = ''
+        nested = []
+
+        for key, value in dict.items(children):
+
+            if isinstance(value, dict):
+                nested.append(_generate_xml_template(value, key))
+
+            else:
+                xml += f'<{key}>{str(value)}</{key}>'
+
+        if nested:
+            for child in nested:
+                xml += child
+
+        return f'<{root}>{str(xml)}</{root}>' if root else xml
+
+    wrapper = (f'<{root_node}>', f'</{root_node}>') if root_node else ('', '')
+    return f'{wrapper[0]}{{% for r in records %}}{_generate_xml_template(columns)}{{% endfor %}}{wrapper[1]}'
+
+
 def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple:  # pylint: disable=R0914
     """Formats output as defined in schema
 
@@ -107,10 +152,12 @@ def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple: 
 
         table_name = schema.get('table_name', 'EXAMPLE_DATA')
         fields = ', '.join(mock.keys())
+
+        # noinspection SqlNoDataSourceInspection
         content = "\n".join([f"INSERT INTO {table_name} ({fields}) VALUES {get_row(row)};" for row in range(0, size)])
         content_type = response.get('content_type', 'application/sql')
 
-    elif schema.get('template', None):
+    elif file_format == 'xml' or schema.get('template', None):
 
         key_words = {
             "include_header": include_header,
@@ -119,8 +166,22 @@ def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple: 
             "exclude_null": exclude_null
         }
 
-        content = _format_template(mock, schema, **key_words)
-        content_type = response.get('content_type', f'text/{file_format}')
+        template = schema.get('template')
+
+        if file_format == 'xml' and not template:
+
+            columns = {column['name']: f"{{{{ r['{column['name']}'] }}}}" for column in schema['columns']}
+
+            if is_nested:
+                columns = un_flatten(columns, key_separator)
+
+            template = generate_xml_template(columns, schema.get('root_node', 'root'))
+
+        content = _format_template(mock, template, **key_words)
+        content_type = response.get(
+            'content_type',
+            'application/xml' if file_format == 'xml' else f'text/{file_format}'
+        )
 
     else:
 
@@ -178,14 +239,14 @@ def _format_json(mock: dict, sep: str, exclude_null: bool = False, is_nested: bo
     return simplejson.dumps([un_flatten(record, sep) if is_nested else record for record in records], ignore_nan=True)
 
 
-def _format_template(mock: dict, schema: dict, **kwargs) -> str:
+def _format_template(mock: dict, template: str, **kwargs) -> str:
     """Returns mock data in html format
 
     :param dict mock: Mock data
-    :param dict schema: Provider integration data schema
+    :param str template: Jinja template
     :return: Rendered template
     :rtype: str
     """
 
     data = pd.DataFrame(mock).to_dict(orient='records')
-    return Template(schema['template']).render(records=data, **kwargs)
+    return Template(template).render(records=data, **kwargs)
