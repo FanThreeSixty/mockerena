@@ -53,6 +53,7 @@ Mockerena allows anyone to mock data files through customized json schemas and p
    Development <development>
    Deployment <deploy>
    Usage <usage>
+   Providers <providers/index>
    Routes <routes>
    API Reference <api>
    About Us <https://www.fanthreesixty.com/about-us/>
