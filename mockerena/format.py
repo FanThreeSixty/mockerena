@@ -196,7 +196,7 @@ def format_output(mock: dict, schema: dict, size: int = DEFAULT_SIZE) -> tuple: 
         return simplejson.dumps(error), 422, {'Content-Type': 'application/json'}
 
     now = datetime.datetime.now().strftime("%Y%m%d%H%M")
-    filename = schema.get('file_name').format(now)
+    filename = schema.get('file_name', schema.get('schema', 'file') + '_{}').format(now)
 
     resp = make_response(content, status_code)
     resp.headers["Content-Type"] = content_type
