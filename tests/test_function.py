@@ -432,6 +432,26 @@ def test_function_pow(client: Eve, sample_schema: dict):
 
 
 @pytest.mark.function
+def test_function_replace(client: Eve, sample_schema: dict):
+    """Test to ensure replace function works
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["foobar"]}
+    sample_schema["columns"][0]["function"] = "replace(this, 'bar', 'baz')"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]['foo'] == "foobaz"
+
+
+@pytest.mark.function
 def test_function_round(client: Eve, sample_schema: dict):
     """Test to ensure round function works
 
@@ -492,6 +512,26 @@ def test_function_str(client: Eve, sample_schema: dict):
 
 
 @pytest.mark.function
+def test_function_strip(client: Eve, sample_schema: dict):
+    """Test to ensure strip function works
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["  foo  "]}
+    sample_schema["columns"][0]["function"] = "strip(this)"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]['foo'] == "foo"
+
+
+@pytest.mark.function
 def test_function_sum(client: Eve, sample_schema: dict):
     """Test to ensure sum function works
 
@@ -516,6 +556,26 @@ def test_function_sum(client: Eve, sample_schema: dict):
     assert res.status_code == 200
     assert res.mimetype == 'application/json'
     assert res.json[0]['baz'] == 3
+
+
+@pytest.mark.function
+def test_function_title(client: Eve, sample_schema: dict):
+    """Test to ensure title function works
+
+    :param Eve client: Mockerena app instance
+    :param dict sample_schema: Sample schema data
+    :raises: AssertionError
+    """
+
+    sample_schema["num_rows"] = 1
+    sample_schema["file_format"] = "json"
+    sample_schema["columns"][0]["args"] = {"elements": ["foo"]}
+    sample_schema["columns"][0]["function"] = "title(this)"
+
+    res = client.post(url_for('custom_schema'), json=sample_schema, headers={'Content-Type': "application/json"})
+    assert res.status_code == 200
+    assert res.mimetype == 'application/json'
+    assert res.json[0]['foo'] == "Foo"
 
 
 @pytest.mark.function
