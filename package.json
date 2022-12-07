@@ -39,7 +39,7 @@
     "serverless-wsgi": "^1.7.4"
   },
   "dependencies": {
-    "serverless": "^1.58.0"
+    "serverless": "^3.25.1"
   },
   "engines": {
     "node": ">= 8.0.0",
